@@ -1,6 +1,5 @@
 package org.bot;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.bot.commands.*;
 import org.bot.utils.Utils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
