@@ -1,7 +1,10 @@
 package org.bot.models;
 
+import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.bot.utils.Utils;
+
+import javax.rmi.CORBA.Util;
 
 @Slf4j
 public class Coin {
@@ -81,15 +84,15 @@ public class Coin {
             sb.setLength(0);
         sb.append(coinName);
         sb.append(" (");
-        sb.append(ticker);
+        Utils.wrapStringWith(sb, ticker, "*");
         sb.append("): ");
-        sb.append("$");
-        sb.append(Utils.roundFloat(price, 4));
+        Utils.wrapStringWith(sb, "$", "`");
+        Utils.wrapStringWith(sb, Utils.roundFloat(price, 4).toString(), "`");
         sb.append(" (");
-        sb.append(change24);
-        sb.append(")\n");
-        //sb.append(multiplier);
-        //sb.append("x\n");
+        Utils.wrapStringWith(sb, change24, "_");
+        sb.append(") ");
+        sb.append(Utils.findEmoji(Double.parseDouble(change24.substring(0, change24.length() - 1))));
+        sb.append("\n");
         return sb.toString();
     }
 }

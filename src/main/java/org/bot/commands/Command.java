@@ -17,7 +17,7 @@ public abstract class Command {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(response);
-        message.setParseMode("HTML");
+        message.setParseMode("Markdown");
         MyBot.getInstance().execute(message);
     }
 
