@@ -1,7 +1,10 @@
 package org.bot.models;
 
+import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.bot.utils.Utils;
+
+import javax.rmi.CORBA.Util;
 
 @Slf4j
 public class Coin {
