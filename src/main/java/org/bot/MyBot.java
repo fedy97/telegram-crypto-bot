@@ -1,6 +1,8 @@
 package org.bot;
 
 import org.bot.commands.*;
+import org.bot.commands.base.AuthorizedCommandDecorator;
+import org.bot.commands.base.CommandHandler;
 import org.bot.utils.Utils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -18,6 +20,11 @@ public class MyBot extends TelegramLongPollingBot {
         commandHandler.register(new HelpCommand());
         commandHandler.register(new ScamCommand());
         commandHandler.register(new MyPortfolioCommand());
+        commandHandler.register(new ShowBuyPriceCommand());
+        // from here on you need to be admin
+        commandHandler.register(new AuthorizedCommandDecorator(new SaveCoinCommand()));
+        commandHandler.register(new AuthorizedCommandDecorator(new DeleteCoinCommand()));
+        commandHandler.register(new AuthorizedCommandDecorator(new DeleteAllCoinsCommand()));
     }
 
     public static MyBot getInstance() {

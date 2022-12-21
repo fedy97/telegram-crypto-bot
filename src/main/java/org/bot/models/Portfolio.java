@@ -12,10 +12,6 @@ public class Portfolio {
         this.sb = new StringBuilder();
     }
 
-    public List<Coin> getCoins() {
-        return coins;
-    }
-
     @Override
     public String toString() {
         if (sb.length() > 0)

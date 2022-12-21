@@ -1,14 +1,21 @@
 package org.bot.models;
 
-import com.vdurmont.emoji.EmojiParser;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.bot.utils.Utils;
 
-import javax.rmi.CORBA.Util;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Slf4j
+@Getter
+@Setter
+@Entity(name = "coins")
 public class Coin {
 
+    @Id
+    private String id;
     private String coinName;
     private String ticker;
     private double price;
@@ -38,46 +45,6 @@ public class Coin {
         return coin;
     }
 
-    public String getCoinName() {
-        return coinName;
-    }
-
-    public void setCoinName(String coinName) {
-        this.coinName = coinName;
-    }
-
-    public String getTicker() {
-        return ticker;
-    }
-
-    public void setTicker(String ticker) {
-        this.ticker = ticker;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getChange24() {
-        return change24;
-    }
-
-    public void setChange24(String change24) {
-        this.change24 = change24;
-    }
-
-    public double getMultiplier() {
-        return multiplier;
-    }
-
-    public void setMultiplier(double multiplier) {
-        this.multiplier = multiplier;
-    }
-
     @Override
     public String toString() {
         if (sb.length() > 0)
@@ -92,6 +59,16 @@ public class Coin {
         Utils.wrapStringWith(sb, change24, "_");
         sb.append(") ");
         sb.append(Utils.findEmoji(Double.parseDouble(change24.substring(0, change24.length() - 1))));
+        sb.append("\n");
+        return sb.toString();
+    }
+
+    public String toShortString() {
+        if (sb.length() > 0)
+            sb.setLength(0);
+        Utils.wrapStringWith(sb, ticker, "*");
+        sb.append(": ");
+        Utils.wrapStringWith(sb, Utils.roundFloat(price, 5).toString(), "`");
         sb.append("\n");
         return sb.toString();
     }

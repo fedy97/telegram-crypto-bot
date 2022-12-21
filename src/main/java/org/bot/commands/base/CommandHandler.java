@@ -1,11 +1,14 @@
-package org.bot.commands;
+package org.bot.commands.base;
 
+import lombok.extern.slf4j.Slf4j;
+import org.bot.commands.NotFoundCommand;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class CommandHandler {
 
     private static CommandHandler instance;
@@ -28,9 +31,11 @@ public class CommandHandler {
     }
 
     public void handle(String command, Update update) throws TelegramApiException {
-        if (commands.containsKey(command)) {
+        log.info(command);
+        String firstWordCommand = command.split(" ")[0];
+        if (commands.containsKey(firstWordCommand)) {
             // Execute the command
-            Command handler = commands.get(command);
+            Command handler = commands.get(firstWordCommand);
             handler.execute(update);
         } else {
             // Unknown command
