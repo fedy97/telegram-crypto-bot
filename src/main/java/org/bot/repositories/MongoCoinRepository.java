@@ -12,8 +12,6 @@ import org.bson.conversions.Bson;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mongodb.client.model.Filters.eq;
-
 public class MongoCoinRepository implements Repository<Coin> {
 
     private final MongoCollection<Document> coins;
@@ -44,11 +42,6 @@ public class MongoCoinRepository implements Repository<Coin> {
     }
 
     @Override
-    public Coin findById(String id) {
-        return null;
-    }
-
-    @Override
     public List<Coin> findAll() {
         QueryCache cache = QueryCache.getInstance();
         List<Document> chachedDocs;
@@ -69,12 +62,8 @@ public class MongoCoinRepository implements Repository<Coin> {
     }
 
     @Override
-    public void deleteById(String id) {
-        coins.deleteOne(eq("id", id));
-    }
-
-    @Override
     public void deleteByValue(String column, String val) {
+        QueryCache.getInstance().deleteElementToListCached(COLLECTION_NAME, column, val);
         Bson filter = Filters.eq(column, val);
         // Delete the document that matches the filter
         coins.deleteOne(filter);
@@ -82,6 +71,7 @@ public class MongoCoinRepository implements Repository<Coin> {
 
     @Override
     public void deleteAll() {
+        QueryCache.getInstance().invalidateCache(COLLECTION_NAME);
         coins.deleteMany(new Document());
     }
 }
