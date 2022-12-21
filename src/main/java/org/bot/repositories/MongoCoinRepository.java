@@ -6,6 +6,7 @@ import com.mongodb.client.model.Filters;
 import org.bot.models.Coin;
 import org.bot.utils.MongoConfig;
 import org.bot.utils.QueryCache;
+import org.bot.utils.Utils;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -16,7 +17,7 @@ public class MongoCoinRepository implements Repository<Coin> {
 
     private final MongoCollection<Document> coins;
 
-    private static final String COLLECTION_NAME = "coins";
+    private static final String COLLECTION_NAME = Utils.getEnvVar("COINS_COLLECTION");
 
     private static MongoCoinRepository instance;
     public static MongoCoinRepository getInstance() {
