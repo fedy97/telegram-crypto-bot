@@ -6,8 +6,6 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-import java.util.Date;
-
 @Slf4j
 public class Main {
     public static void main(String[] args) {
@@ -17,7 +15,7 @@ public class Main {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             // Register the bot
             botsApi.registerBot(MyBot.getInstance());
-            log.info("Starting bot at: " + new Date());
+            log.info("Starting bot...");
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
