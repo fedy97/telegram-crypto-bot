@@ -20,7 +20,7 @@ public class Coin {
     private String ticker;
     private double price;
     private String change24;
-    private double multiplier;
+    private String multiplier;
 
     private final StringBuilder sb;
 
@@ -29,7 +29,7 @@ public class Coin {
         this.sb = new StringBuilder();
         this.price = 0.0;
         this.change24 = "0%";
-        this.multiplier = 0;
+        this.multiplier = "";
     }
 
     public static Coin fromRawCoin(String raw) {
@@ -59,6 +59,7 @@ public class Coin {
         Utils.wrapStringWith(sb, change24, "_");
         sb.append(") ");
         sb.append(Utils.findEmoji(Double.parseDouble(change24.substring(0, change24.length() - 1))));
+        sb.append(" ").append(multiplier);
         sb.append("\n");
         return sb.toString();
     }

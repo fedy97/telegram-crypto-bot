@@ -31,7 +31,7 @@ public class CommandHandler {
     }
 
     public void handle(String command, Update update) throws TelegramApiException {
-        log.info(command);
+        log.info(update.getMessage().getFrom().getUserName() + ", " + update.getMessage().getFrom().getFirstName() + ": " + command);
         String firstWordCommand = command.split(" ")[0];
         if (commands.containsKey(firstWordCommand)) {
             // Execute the command
