@@ -21,6 +21,10 @@ public interface Command {
         }
     }
 
+    default boolean isValidated() {
+        return true;
+    }
+
     String getName();
 
     String getDescription();

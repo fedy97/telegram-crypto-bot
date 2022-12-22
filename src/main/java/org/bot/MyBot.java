@@ -1,5 +1,6 @@
 package org.bot;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bot.commands.*;
 import org.bot.commands.base.AuthorizedCommandDecorator;
 import org.bot.commands.base.CommandHandler;
@@ -8,6 +9,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+@Slf4j
 public class MyBot extends TelegramLongPollingBot {
 
     private static MyBot instance;
@@ -41,7 +43,7 @@ public class MyBot extends TelegramLongPollingBot {
             try {
                 commandHandler.handle(messageText, update);
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
     }

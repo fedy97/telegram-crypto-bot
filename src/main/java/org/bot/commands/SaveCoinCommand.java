@@ -19,7 +19,7 @@ public class SaveCoinCommand implements Command {
         String[] parts = update.getMessage().getText().split(" ");
         if (parts.length != 3) {
             log.error("Invalid command format");
-            sendText(update.getMessage().getChatId(), "Invalid command format. Use /save <ticker> <price>");
+            sendText(update.getMessage().getChatId(), "Invalid command format. Use /save <ticker> <buy price>");
             return;
         }
         String ticker = parts[1].toUpperCase();

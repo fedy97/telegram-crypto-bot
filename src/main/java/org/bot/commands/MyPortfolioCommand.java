@@ -6,10 +6,9 @@ import org.bot.utils.CoingeckoFacade;
 import org.bot.utils.Utils;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.io.IOException;
-
-
 public class MyPortfolioCommand implements Command {
+
+    private static final String URL = Utils.getEnvVar("CG_URL_PRIVATE");
 
     public MyPortfolioCommand() {
         super();
@@ -21,7 +20,7 @@ public class MyPortfolioCommand implements Command {
         try {
             String response = buildScamSalesResponse();
             sendText(chatId, response);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -36,10 +35,15 @@ public class MyPortfolioCommand implements Command {
         return "show morre portfolio";
     }
 
-    private String buildScamSalesResponse() throws IOException {
+    private String buildScamSalesResponse() {
         CoingeckoFacade coingeckoFacade = CoingeckoFacade.getInstance();
-        Portfolio portfolio = coingeckoFacade.getCoingeckoPortfolio(Utils.getEnvVar("CG_URL_PRIVATE"));
+        Portfolio portfolio = coingeckoFacade.getCoingeckoPortfolio(URL);
         return portfolio.toString();
+    }
+
+    @Override
+    public boolean isValidated() {
+        return URL.contains("coingecko.com/it/portfolios/public/");
     }
 
 }

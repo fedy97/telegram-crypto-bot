@@ -27,7 +27,8 @@ public class CommandHandler {
     private final Map<String, Command> commands = new HashMap<>();
 
     public void register(Command handler) {
-        commands.put(handler.getName(), handler);
+        if (handler.isValidated())
+            commands.put(handler.getName(), handler);
     }
 
     public void handle(String command, Update update) throws TelegramApiException {

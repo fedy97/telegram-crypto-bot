@@ -6,11 +6,10 @@ import org.bot.utils.CoingeckoFacade;
 import org.bot.utils.Utils;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.io.IOException;
-
 
 public class ScamCommand implements Command {
 
+    private static final String URL = Utils.getEnvVar("CG_URL_SHARED");
     public ScamCommand() {
         super();
     }
@@ -36,10 +35,14 @@ public class ScamCommand implements Command {
         return "show scam sales portfolio";
     }
 
-    private String buildScamSalesResponse() throws IOException {
+    private String buildScamSalesResponse() {
         CoingeckoFacade coingeckoFacade = CoingeckoFacade.getInstance();
-        Portfolio portfolio = coingeckoFacade.getCoingeckoPortfolio(Utils.getEnvVar("CG_URL_SHARED"));
+        Portfolio portfolio = coingeckoFacade.getCoingeckoPortfolio(URL);
         return portfolio.toString();
     }
 
+    @Override
+    public boolean isValidated() {
+        return URL.contains("coingecko.com/it/portfolios/public/");
+    }
 }

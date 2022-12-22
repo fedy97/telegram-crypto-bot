@@ -9,7 +9,6 @@ import org.apache.http.util.EntityUtils;
 import org.bot.models.Coin;
 import org.bot.models.Portfolio;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class CoingeckoFacade {
         return instance;
     }
 
-    public Portfolio getCoingeckoPortfolio(String url) throws IOException {
+    public Portfolio getCoingeckoPortfolio(String url) {
         List<Coin> coins = new ArrayList<>();
         CloseableHttpResponse response;
         try (CloseableHttpClient client = HttpClients.createDefault()) {
@@ -39,6 +38,8 @@ public class CoingeckoFacade {
             String[] coinsRaw = responseBody.split("<img class=\"lazy\" alt=\"");
             for (int i = 1; i < coinsRaw.length; i = i + 2)
                 coins.add(Coin.fromRawCoin(coinsRaw[i]));
+        } catch (Exception e) {
+            log.error("Error in fetching resource");
         }
         return new Portfolio(coins);
     }
