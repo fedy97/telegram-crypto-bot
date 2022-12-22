@@ -1,12 +1,13 @@
 package org.bot.commands;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bot.commands.base.Command;
 import org.bot.models.Coin;
 import org.bot.repositories.MongoCoinRepository;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-
+@Slf4j
 public class SaveCoinCommand implements Command {
 
     public SaveCoinCommand() {
@@ -17,14 +18,16 @@ public class SaveCoinCommand implements Command {
     public void execute(Update update) throws TelegramApiException {
         String[] parts = update.getMessage().getText().split(" ");
         if (parts.length != 3) {
+            log.error("Invalid command format");
             sendText(update.getMessage().getChatId(), "Invalid command format. Use /save <ticker> <price>");
             return;
         }
-        String ticker = parts[1];
+        String ticker = parts[1].toUpperCase();
         double price;
         try {
-            price = Double.parseDouble(parts[2]);
+            price = Double.parseDouble(parts[2].replace(",", "."));
         } catch (NumberFormatException e) {
+            log.error("Invalid Price: " + parts[2]);
             sendText(update.getMessage().getChatId(), "Invalid price: " + parts[2]);
             return;
         }
