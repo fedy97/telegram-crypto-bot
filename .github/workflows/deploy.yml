@@ -71,3 +71,4 @@ jobs:
           cd telegram-crypto-bot
           docker-compose pull
           docker-compose up -d
+          docker rmi $(docker images -a | grep "<none>" | grep "${{secrets.DOCKER_USER}}/telegram-crypto-bot" | awk '{print $3}')
