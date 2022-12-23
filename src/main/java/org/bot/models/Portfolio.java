@@ -1,7 +1,8 @@
 package org.bot.models;
 
-import org.bot.repositories.MongoCoinRepository;
 import org.bot.utils.Utils;
+import org.bot.utils.fetchers.CoinFetcherFactory;
+import org.bot.utils.fetchers.DataFetcher;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,8 @@ public class Portfolio {
 
     public Portfolio(List<Coin> coins) {
         this.coins = coins;
-        List<Coin> bp = MongoCoinRepository.getInstance().findAll();
+        DataFetcher<Coin> dataFetcher = CoinFetcherFactory.getInstance().createDataFetcher();
+        List<Coin> bp = dataFetcher.fetchAll();
         this.buyPrices = bp.stream()
                 .collect(Collectors.toMap(
                         Coin::getTicker,

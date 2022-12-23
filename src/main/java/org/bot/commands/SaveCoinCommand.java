@@ -1,17 +1,23 @@
 package org.bot.commands;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bot.cache.CoinCache;
 import org.bot.commands.base.Command;
 import org.bot.models.Coin;
-import org.bot.repositories.MongoCoinRepository;
+import org.bot.observer.Notifier;
+import org.bot.observer.UpdateRequest;
+import org.bot.observer.actions.AddAction;
+import org.bot.repositories.CoinRepository;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Slf4j
-public class SaveCoinCommand implements Command {
+public class SaveCoinCommand extends Notifier<Coin> implements Command {
 
     public SaveCoinCommand() {
         super();
+        registerObserver(CoinCache.getInstance());
+        registerObserver(CoinRepository.getInstance());
     }
 
     @Override
@@ -34,7 +40,9 @@ public class SaveCoinCommand implements Command {
         Coin coin = new Coin();
         coin.setTicker(ticker);
         coin.setPrice(price);
-        MongoCoinRepository.getInstance().save(coin);
+        UpdateRequest<Coin> updateRequest = new UpdateRequest<>();
+        updateRequest.setEntity(coin);
+        notifyObservers(new AddAction<>(updateRequest));
         sendText(update.getMessage().getChatId(), "Coin saved");
     }
 

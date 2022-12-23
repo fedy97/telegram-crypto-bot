@@ -3,35 +3,42 @@ package org.bot.repositories;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import lombok.extern.slf4j.Slf4j;
 import org.bot.models.Coin;
+import org.bot.observer.Observer;
+import org.bot.observer.actions.Action;
 import org.bot.utils.MongoConfig;
-import org.bot.utils.QueryCache;
 import org.bot.utils.Utils;
+import org.bot.utils.fetchers.DataFetcher;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MongoCoinRepository implements Repository<Coin> {
+@Slf4j
+public class CoinRepository implements Repository<Coin>, DataFetcher<Coin>, Observer<Coin> {
 
     private final MongoCollection<Document> coins;
 
-    private static final String COLLECTION_NAME = Utils.getEnvVar("COINS_COLLECTION");
-
-    private static MongoCoinRepository instance;
-    public static MongoCoinRepository getInstance() {
+    private static CoinRepository instance;
+    public static CoinRepository getInstance() {
         if (instance == null) {
-            instance = new MongoCoinRepository();
+            instance = new CoinRepository();
         }
         return instance;
     }
 
-    private MongoCoinRepository(){
+    private CoinRepository(){
         MongoDatabase database = MongoConfig.getInstance().getDatabase();
-        this.coins = database.getCollection(COLLECTION_NAME);
+        this.coins = database.getCollection(getCollectionName());
     }
 
+
+    @Override
+    public String getCollectionName() {
+        return Utils.getEnvVar("COINS_COLLECTION");
+    }
 
     @Override
     public void save(Coin coin) {
@@ -39,21 +46,14 @@ public class MongoCoinRepository implements Repository<Coin> {
                 .append("ticker", coin.getTicker())
                 .append("price", coin.getPrice());
         coins.insertOne(doc);
-        QueryCache.getInstance().addElementToListCached(COLLECTION_NAME, doc);
     }
 
     @Override
     public List<Coin> findAll() {
-        QueryCache cache = QueryCache.getInstance();
-        List<Document> chachedDocs;
+        List<Document> docs;
         List<Coin> result = new ArrayList<>();
-        if (!cache.isCached(COLLECTION_NAME)) {
-            chachedDocs = coins.find().into(new ArrayList<>());
-            cache.addToCache(COLLECTION_NAME, chachedDocs);
-        } else {
-            chachedDocs = cache.getCachedResult(COLLECTION_NAME);
-        }
-        for (Document doc : chachedDocs) {
+        docs = coins.find().into(new ArrayList<>());
+        for (Document doc : docs) {
             Coin coin = new Coin();
             coin.setTicker(doc.getString("ticker"));
             coin.setPrice(doc.getDouble("price"));
@@ -64,7 +64,6 @@ public class MongoCoinRepository implements Repository<Coin> {
 
     @Override
     public void deleteByValue(String column, String val) {
-        QueryCache.getInstance().deleteElementToListCached(COLLECTION_NAME, column, val);
         Bson filter = Filters.eq(column, val);
         // Delete the document that matches the filter
         coins.deleteOne(filter);
@@ -72,7 +71,18 @@ public class MongoCoinRepository implements Repository<Coin> {
 
     @Override
     public void deleteAll() {
-        QueryCache.getInstance().invalidateCache(COLLECTION_NAME);
         coins.deleteMany(new Document());
+    }
+
+    @Override
+    public List<Coin> fetchAll() {
+        log.info("fetching from repository");
+        return findAll();
+    }
+
+    @Override
+    public void update(Action<Coin> action) {
+        log.info("notifying repository");
+        action.doAction(this);
     }
 }

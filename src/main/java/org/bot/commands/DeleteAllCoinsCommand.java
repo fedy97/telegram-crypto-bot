@@ -1,20 +1,27 @@
 package org.bot.commands;
 
+import org.bot.cache.CoinCache;
 import org.bot.commands.base.Command;
-import org.bot.repositories.MongoCoinRepository;
+import org.bot.models.Coin;
+import org.bot.observer.Notifier;
+import org.bot.observer.UpdateRequest;
+import org.bot.observer.actions.DeleteAllAction;
+import org.bot.repositories.CoinRepository;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
-public class DeleteAllCoinsCommand implements Command {
+public class DeleteAllCoinsCommand extends Notifier<Coin> implements Command {
 
     public DeleteAllCoinsCommand() {
         super();
+        registerObserver(CoinCache.getInstance());
+        registerObserver(CoinRepository.getInstance());
     }
 
     @Override
     public void execute(Update update) throws TelegramApiException {
-        MongoCoinRepository.getInstance().deleteAll();
+        notifyObservers(new DeleteAllAction<>(new UpdateRequest<>()));
         sendText(update.getMessage().getChatId(), "deleted all coins");
     }
 

@@ -1,12 +1,6 @@
 package org.bot.repositories;
 
-import java.util.List;
+import org.bot.utils.Data;
 
-public interface Repository<T> {
-    void save(T t);
-    List<T> findAll();
-
-    void deleteByValue(String column, String val);
-
-    void deleteAll();
+public interface Repository<T> extends Data<T> {
 }

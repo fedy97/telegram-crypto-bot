@@ -5,24 +5,21 @@ import org.bot.models.Portfolio;
 import org.bot.utils.CoingeckoFacade;
 import org.bot.utils.Utils;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-public class MyPortfolioCommand implements Command {
+public class PortfolioCommand implements Command {
 
     private static final String URL = Utils.getEnvVar("CG_URL_PRIVATE");
 
-    public MyPortfolioCommand() {
+    public PortfolioCommand() {
         super();
     }
 
     @Override
-    public void execute(Update update) {
+    public void execute(Update update) throws TelegramApiException {
         long chatId = update.getMessage().getChatId();
-        try {
-            String response = buildScamSalesResponse();
-            sendText(chatId, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String response = buildScamSalesResponse();
+        sendText(chatId, response);
     }
 
     @Override
@@ -32,7 +29,7 @@ public class MyPortfolioCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "show morre portfolio";
+        return "show owner portfolio";
     }
 
     private String buildScamSalesResponse() {

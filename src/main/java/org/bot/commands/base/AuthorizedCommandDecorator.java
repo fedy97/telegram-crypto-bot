@@ -15,6 +15,7 @@ public class AuthorizedCommandDecorator extends CommandDecorator {
     public void execute(Update update) throws TelegramApiException {
         // Perform authorization check here
         if (!isAuthorized(update)) {
+            log.info("Not Authorized");
             sendText(update.getMessage().getChatId(), "You are not authorized");
             return;
         }
@@ -39,11 +40,6 @@ public class AuthorizedCommandDecorator extends CommandDecorator {
 
     private boolean isAuthorized(Update update) {
         String username = update.getMessage().getFrom().getUserName();
-        if (username == null || !username.equals(Utils.getEnvVar("TG_ADMIN"))) {
-            log.info(username + " not authorized to perform this action");
-            return false;
-        }
-        else
-            return true;
+        return username != null && username.equals(Utils.getEnvVar("TG_ADMIN"));
     }
 }
