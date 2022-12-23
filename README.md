@@ -23,6 +23,9 @@
 - [x] Decorator
 - [x] Facade
 - [x] Repository
+- [x] Factory
+- [x] Strategy
+- [x] Observer
 
 
 #### How to Use it:
