@@ -1,7 +1,7 @@
 package org.bot.commands.base;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bot.commands.NotFoundCommand;
+import org.bot.utils.Utils;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -12,6 +12,12 @@ import java.util.Map;
 public class CommandHandler {
 
     private static CommandHandler instance;
+    // Map of available commands
+    private final Map<String, Command> commands = new HashMap<>();
+
+    private CommandHandler() {
+    }
+
     public static CommandHandler getInstance() {
         if (instance == null) {
             instance = new CommandHandler();
@@ -19,16 +25,13 @@ public class CommandHandler {
         return instance;
     }
 
-    private CommandHandler(){
-        // empty
-    }
-
-    // Map of available commands
-    private final Map<String, Command> commands = new HashMap<>();
-
     public void register(Command handler) {
         if (handler.isValidated())
             commands.put(handler.getName(), handler);
+    }
+
+    public void unregister(String commandName) {
+        commands.remove(commandName);
     }
 
     public void handle(String command, Update update) throws TelegramApiException {
@@ -40,7 +43,7 @@ public class CommandHandler {
             handler.execute(update);
         } else {
             // Unknown command
-            NotFoundCommand.getInstance().execute(update);
+            Utils.sendNotFoundMessage(update);
         }
     }
 

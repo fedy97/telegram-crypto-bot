@@ -24,7 +24,7 @@ public class DeleteCoinCommand extends Notifier<Coin> implements Command {
     public void execute(Update update) throws TelegramApiException {
         String[] parts = update.getMessage().getText().split(" ");
         if (parts.length != 2) {
-            log.error("Invalid command format");
+            log.warn("Invalid command format");
             sendText(update.getMessage().getChatId(), "Invalid command format. Use /delete <ticker>");
             return;
         }

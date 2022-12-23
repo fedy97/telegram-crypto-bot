@@ -34,10 +34,9 @@ To run the bot, you need to define the following Environmental Variables:
 
 - `TELEGRAM_BOT_NAME` = Ask BotFather in Telegram
 - `TELEGRAM_BOT_TOKEN` = Ask BotFather in Telegram
-- `CG_URL_PRIVATE` = Coingecko public URL of your portfolio (ex `coingecko.com/it/portfolios/public/...`)
-- `CG_URL_SHARED` = Optionally, Coingecko public URL of another portfolio
 - `MONGO_DB_URI` = To connect to MongoDB
-- `COINS_COLLECTION` = Name of the collection of your saved coins (`/prices`), you could use `coins`
+- `COINS_COLLECTION` = Optional, name of the collection of your saved coins, default `coins`
+- `PORTFOLIO_LINKS_COLLECTION` = Optional, name of the collection of your coingecko portfolios, default `portfolio_links`
 - `TG_ADMIN` = Telegram username of the owner, you can set yours
 
 Then go to your instance of the Telegram bot and type `/start`

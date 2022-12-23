@@ -2,7 +2,7 @@ package org.bot.models;
 
 import org.bot.utils.Utils;
 import org.bot.utils.fetchers.CoinFetcherFactory;
-import org.bot.utils.fetchers.DataFetcher;
+import org.bot.utils.fetchers.base.DataFetcher;
 
 import java.util.HashMap;
 import java.util.List;

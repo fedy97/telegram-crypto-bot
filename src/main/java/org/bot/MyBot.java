@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bot.commands.*;
 import org.bot.commands.base.AuthorizedCommandDecorator;
 import org.bot.commands.base.CommandHandler;
+import org.bot.commands.base.CommandProcessor;
 import org.bot.utils.Utils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -20,13 +21,16 @@ public class MyBot extends TelegramLongPollingBot {
         commandHandler = CommandHandler.getInstance();
         commandHandler.register(new StartCommand());
         commandHandler.register(new HelpCommand());
-        commandHandler.register(new ScamCommand());
         commandHandler.register(new PricesCommand());
         // from here on you need to be admin
-        commandHandler.register(new AuthorizedCommandDecorator(new PortfolioCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new SaveCoinCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new DeleteCoinCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new DeleteAllCoinsCommand()));
+
+        commandHandler.register(new AuthorizedCommandDecorator(new SavePortfolioLinkCommand()));
+        commandHandler.register(new AuthorizedCommandDecorator(new DeletePortfolioLinkCommand()));
+
+        CommandProcessor.getInstance().registerPortfolioCommands();
     }
 
     public static MyBot getInstance() {

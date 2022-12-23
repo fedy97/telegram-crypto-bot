@@ -24,7 +24,7 @@ public class SaveCoinCommand extends Notifier<Coin> implements Command {
     public void execute(Update update) throws TelegramApiException {
         String[] parts = update.getMessage().getText().split(" ");
         if (parts.length != 3) {
-            log.error("Invalid command format");
+            log.warn("Invalid command format");
             sendText(update.getMessage().getChatId(), "Invalid command format. Use /save <ticker> <buy price>");
             return;
         }

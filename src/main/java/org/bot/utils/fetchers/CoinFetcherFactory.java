@@ -1,9 +1,11 @@
 package org.bot.utils.fetchers;
 
-import org.bot.cache.CachingDataDecorator;
+import org.bot.cache.base.CachingDataDecorator;
 import org.bot.cache.CoinCache;
 import org.bot.models.Coin;
 import org.bot.repositories.CoinRepository;
+import org.bot.utils.fetchers.base.DataFetcher;
+import org.bot.utils.fetchers.base.DataFetcherFactory;
 
 public class CoinFetcherFactory implements DataFetcherFactory<Coin> {
 
@@ -28,8 +30,10 @@ public class CoinFetcherFactory implements DataFetcherFactory<Coin> {
         DataFetcher<Coin> strategy;
         CoinCache coinCache = CoinCache.getInstance();
         if (coinCache.isEmpty())
+            // fetch from db and add to cache
             strategy = new CachingDataDecorator<>(CoinRepository.getInstance(), coinCache);
         else
+            // already in cache, return it
             strategy = coinCache;
         return strategy;
     }

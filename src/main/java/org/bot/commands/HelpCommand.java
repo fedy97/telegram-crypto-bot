@@ -36,7 +36,7 @@ public class HelpCommand implements Command {
             if (cmd.getName().equals(getName()))
                 continue;
             sb.append(cmd.getName());
-            sb.append(" --> ");
+            sb.append(" ");
             sb.append(cmd.getDescription());
             sb.append("\n");
         }
