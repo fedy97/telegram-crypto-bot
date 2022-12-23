@@ -9,7 +9,7 @@ public class AddAction<T> extends Action<T> {
     }
 
     @Override
-    public void doAction(Data<T> subject) {
+    public void executedBy(Data<T> subject) {
         subject.save(updateRequest.getEntity());
     }
 }

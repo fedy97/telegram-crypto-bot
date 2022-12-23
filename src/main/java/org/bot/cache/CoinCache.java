@@ -33,7 +33,6 @@ public class CoinCache implements Cache<Coin>, DataFetcher<Coin>, Observer<Coin>
 
     @Override
     public List<Coin> fetchAll() {
-        log.info("fetching from cache");
         return findAll();
     }
 
@@ -90,7 +89,6 @@ public class CoinCache implements Cache<Coin>, DataFetcher<Coin>, Observer<Coin>
 
     @Override
     public void update(Action<Coin> action) {
-        log.info("notifying cache");
-        action.doAction(this);
+        action.executedBy(this);
     }
 }

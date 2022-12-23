@@ -9,7 +9,7 @@ public class DeleteAction<T> extends Action<T>{
     }
 
     @Override
-    public void doAction(Data<T> subject) {
+    public void executedBy(Data<T> subject) {
         subject.deleteByValue(updateRequest.getCol(), updateRequest.getVal());
     }
 }

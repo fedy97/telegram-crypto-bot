@@ -11,5 +11,5 @@ public abstract class Action<T> {
         this.updateRequest = updateRequest;
     }
 
-    public abstract void doAction(Data<T> subject);
+    public abstract void executedBy(Data<T> subject);
 }

@@ -76,13 +76,11 @@ public class CoinRepository implements Repository<Coin>, DataFetcher<Coin>, Obse
 
     @Override
     public List<Coin> fetchAll() {
-        log.info("fetching from repository");
         return findAll();
     }
 
     @Override
     public void update(Action<Coin> action) {
-        log.info("notifying repository");
-        action.doAction(this);
+        action.executedBy(this);
     }
 }
