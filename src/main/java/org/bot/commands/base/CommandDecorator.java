@@ -1,5 +1,7 @@
 package org.bot.commands.base;
 
+import org.bot.visitor.CommandVisitor;
+
 public abstract class CommandDecorator implements Command {
     protected Command command;
 
@@ -7,4 +9,8 @@ public abstract class CommandDecorator implements Command {
         this.command = command;
     }
 
+    @Override
+    public void accept(CommandVisitor visitor) {
+        command.accept(visitor);
+    }
 }

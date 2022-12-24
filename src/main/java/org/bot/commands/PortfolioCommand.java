@@ -5,7 +5,7 @@ import org.bot.commands.base.Command;
 import org.bot.models.Portfolio;
 import org.bot.models.PortfolioLink;
 import org.bot.utils.CoingeckoFacade;
-import org.bot.utils.Validator;
+import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -42,8 +42,7 @@ public class PortfolioCommand implements Command {
     }
 
     @Override
-    public boolean isValidated() {
-        return Validator.validCoingeckoLink(getPortfolioLink().getLink());
+    public void accept(CommandVisitor visitor) {
+        // no need to be visited
     }
-
 }

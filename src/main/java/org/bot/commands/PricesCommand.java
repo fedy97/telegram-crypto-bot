@@ -4,6 +4,7 @@ import org.bot.commands.base.Command;
 import org.bot.models.Coin;
 import org.bot.utils.fetchers.CoinFetcherFactory;
 import org.bot.utils.fetchers.base.DataFetcher;
+import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -35,7 +36,11 @@ public class PricesCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "show buy prices of all coins";
+        return "to show buy prices of all coins";
     }
 
+    @Override
+    public void accept(CommandVisitor visitor) {
+        // no need to be visited
+    }
 }

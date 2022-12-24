@@ -8,6 +8,7 @@ import org.bot.observer.Notifier;
 import org.bot.observer.UpdateRequest;
 import org.bot.observer.actions.DeleteAction;
 import org.bot.repositories.CoinRepository;
+import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -23,11 +24,6 @@ public class DeleteCoinCommand extends Notifier<Coin> implements Command {
     @Override
     public void execute(Update update) throws TelegramApiException {
         String[] parts = update.getMessage().getText().split(" ");
-        if (parts.length != 2) {
-            log.warn("Invalid command format");
-            sendText(update.getMessage().getChatId(), "Invalid command format. Use /delete <ticker>");
-            return;
-        }
         String ticker = parts[1].toUpperCase();
         UpdateRequest<Coin> updateRequest = new UpdateRequest<>();
         updateRequest.setCol("ticker");
@@ -43,7 +39,11 @@ public class DeleteCoinCommand extends Notifier<Coin> implements Command {
 
     @Override
     public String getDescription() {
-        return "delete a coin from DB";
+        return "<coin> to delete a coin from DB";
     }
 
+    @Override
+    public void accept(CommandVisitor visitor) {
+        visitor.visitDeleteCoinCommand();
+    }
 }

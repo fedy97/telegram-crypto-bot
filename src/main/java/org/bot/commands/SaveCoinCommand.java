@@ -8,6 +8,7 @@ import org.bot.observer.Notifier;
 import org.bot.observer.UpdateRequest;
 import org.bot.observer.actions.AddAction;
 import org.bot.repositories.CoinRepository;
+import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -23,20 +24,8 @@ public class SaveCoinCommand extends Notifier<Coin> implements Command {
     @Override
     public void execute(Update update) throws TelegramApiException {
         String[] parts = update.getMessage().getText().split(" ");
-        if (parts.length != 3) {
-            log.warn("Invalid command format");
-            sendText(update.getMessage().getChatId(), "Invalid command format. Use /save <ticker> <buy price>");
-            return;
-        }
         String ticker = parts[1].toUpperCase();
-        double price;
-        try {
-            price = Double.parseDouble(parts[2].replace(",", "."));
-        } catch (NumberFormatException e) {
-            log.error("Invalid Price: " + parts[2]);
-            sendText(update.getMessage().getChatId(), "Invalid price: " + parts[2]);
-            return;
-        }
+        double price = Double.parseDouble(parts[2].replace(",", "."));
         Coin coin = new Coin();
         coin.setTicker(ticker);
         coin.setPrice(price);
@@ -53,7 +42,11 @@ public class SaveCoinCommand extends Notifier<Coin> implements Command {
 
     @Override
     public String getDescription() {
-        return "to save a new coin with its buy price";
+        return "<coin> to save a new coin with its buy price";
     }
 
+    @Override
+    public void accept(CommandVisitor visitor) {
+        visitor.visitSaveCoinCommand();
+    }
 }

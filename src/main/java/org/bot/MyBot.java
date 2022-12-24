@@ -25,8 +25,6 @@ public class MyBot extends TelegramLongPollingBot {
         // from here on you need to be admin
         commandHandler.register(new AuthorizedCommandDecorator(new SaveCoinCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new DeleteCoinCommand()));
-        commandHandler.register(new AuthorizedCommandDecorator(new DeleteAllCoinsCommand()));
-
         commandHandler.register(new AuthorizedCommandDecorator(new SavePortfolioLinkCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new DeletePortfolioLinkCommand()));
 
@@ -42,7 +40,7 @@ public class MyBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText() && update.getMessage().getText().startsWith("/")) {
+        if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             try {
                 commandHandler.handle(messageText, update);

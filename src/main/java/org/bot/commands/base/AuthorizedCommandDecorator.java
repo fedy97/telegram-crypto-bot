@@ -33,13 +33,9 @@ public class AuthorizedCommandDecorator extends CommandDecorator {
         return command.getDescription();
     }
 
-    @Override
-    public boolean isValidated() {
-        return command.isValidated();
-    }
-
     private boolean isAuthorized(Update update) {
         String username = update.getMessage().getFrom().getUserName();
         return username != null && username.equals(Utils.getEnvVar("TG_ADMIN"));
     }
+
 }

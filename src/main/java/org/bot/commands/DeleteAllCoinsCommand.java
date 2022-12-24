@@ -7,6 +7,7 @@ import org.bot.observer.Notifier;
 import org.bot.observer.UpdateRequest;
 import org.bot.observer.actions.DeleteAllAction;
 import org.bot.repositories.CoinRepository;
+import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -32,7 +33,11 @@ public class DeleteAllCoinsCommand extends Notifier<Coin> implements Command {
 
     @Override
     public String getDescription() {
-        return "delete all coins from DB";
+        return "to delete all coins from DB";
     }
 
+    @Override
+    public void accept(CommandVisitor visitor) {
+        // no need to be visited
+    }
 }

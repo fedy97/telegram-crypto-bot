@@ -9,6 +9,7 @@ import org.bot.observer.Notifier;
 import org.bot.observer.UpdateRequest;
 import org.bot.observer.actions.DeleteAction;
 import org.bot.repositories.PortfolioLinkRepository;
+import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -45,7 +46,11 @@ public class DeletePortfolioLinkCommand extends Notifier<PortfolioLink> implemen
 
     @Override
     public String getDescription() {
-        return " <name> to delete a portfolio";
+        return "<name> to delete a portfolio";
     }
 
+    @Override
+    public void accept(CommandVisitor visitor) {
+        visitor.visitDeletePortfolioLinkCommand();
+    }
 }

@@ -18,14 +18,14 @@
 
 ### Design Patterns:
 
-- [x] Command
-- [x] Singleton
-- [x] Decorator
-- [x] Facade
-- [x] Repository
-- [x] Factory
-- [x] Strategy
-- [x] Observer
+- [x] Command (to handle the Telegram commands)
+- [x] Singleton (to reuse objects and spare memory and for the caching system)
+- [x] Decorator (to add additional behaviour: 1. put in cache the data fetched from db 2. authorization check for some commands)
+- [x] Facade (to hide Coingecko operations to build the portfolio)
+- [x] Factory (to create the right strategy)
+- [x] Strategy (to change behaviour based on 1. add/delete/deleteall actions 2. fetch from db/cache)
+- [x] Observer (to notify observers of a added/removed portfolio)
+- [x] Visitor (to validate commands)
 
 
 #### How to Use it:

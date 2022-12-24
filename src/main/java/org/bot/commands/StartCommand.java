@@ -1,6 +1,7 @@
 package org.bot.commands;
 
 import org.bot.commands.base.Command;
+import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -25,7 +26,11 @@ public class StartCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "show welcome message";
+        return "to show welcome message";
     }
 
+    @Override
+    public void accept(CommandVisitor visitor) {
+        // no need to be visited
+    }
 }

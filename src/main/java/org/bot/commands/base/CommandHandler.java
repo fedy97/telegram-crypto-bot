@@ -1,7 +1,8 @@
 package org.bot.commands.base;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bot.utils.Utils;
+import org.bot.utils.InvalidCommandException;
+import org.bot.visitor.ValidatingCommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -26,8 +27,7 @@ public class CommandHandler {
     }
 
     public void register(Command handler) {
-        if (handler.isValidated())
-            commands.put(handler.getName(), handler);
+        commands.put(handler.getName(), handler);
     }
 
     public void unregister(String commandName) {
@@ -38,12 +38,16 @@ public class CommandHandler {
         log.info(update.getMessage().getFrom().getUserName() + ", " + update.getMessage().getFrom().getFirstName() + ": " + command);
         String firstWordCommand = command.split(" ")[0];
         if (commands.containsKey(firstWordCommand)) {
-            // Execute the command
             Command handler = commands.get(firstWordCommand);
-            handler.execute(update);
-        } else {
-            // Unknown command
-            Utils.sendNotFoundMessage(update);
+            try {
+                // Validate first the command
+                handler.accept(new ValidatingCommandVisitor(update));
+                // Execute the command
+                handler.execute(update);
+            } catch (InvalidCommandException | NumberFormatException e) {
+                log.warn("Invalid command format");
+                handler.sendText(update.getMessage().getChatId(), "Invalid command format. Use " + handler.getName() + " " + handler.getDescription());
+            }
         }
     }
 
