@@ -4,9 +4,7 @@ import org.bot.utils.Utils;
 import org.bot.utils.fetchers.CoinFetcherFactory;
 import org.bot.utils.fetchers.base.DataFetcher;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Portfolio {
@@ -47,5 +45,17 @@ public class Portfolio {
             sb.append(coin.toString());
         }
         return sb.toString();
+    }
+
+    public void sort() {
+        // find coins with empty multiplier
+        List<Coin> excludedCoins = coins.stream()
+                .filter(coin -> coin.getMultiplier().isEmpty())
+                .collect(Collectors.toList());
+        coins.removeAll(excludedCoins);
+        // sort coins by multiplier value
+        coins.sort((c1, c2) -> c2.getMultiplier().compareTo(c1.getMultiplier()));
+        // put at the end of the list the excluded coins
+        coins.addAll(excludedCoins);
     }
 }

@@ -38,6 +38,7 @@ public class PortfolioCommand implements Command {
     private String buildPortfolioResponse() {
         CoingeckoFacade coingeckoFacade = CoingeckoFacade.getInstance();
         Portfolio portfolio = coingeckoFacade.getCoingeckoPortfolio(getPortfolioLink().getLink());
+        portfolio.sort();
         return portfolio.toString();
     }
 
