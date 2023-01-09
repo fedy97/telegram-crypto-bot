@@ -35,16 +35,16 @@ public class CommandHandler {
     }
 
     public void handle(String command, Update update) throws TelegramApiException {
-        log.info(update.getMessage().getFrom().getUserName() + ", " + update.getMessage().getFrom().getFirstName() + ": " + command);
         String firstWordCommand = command.split(" ")[0];
         if (commands.containsKey(firstWordCommand)) {
+            log.info(update.getMessage().getFrom().getUserName() + ", " + update.getMessage().getFrom().getFirstName() + ": " + command);
             Command handler = commands.get(firstWordCommand);
             try {
                 // Validate first the command
                 handler.accept(new ValidatingCommandVisitor(update));
                 // Execute the command
                 handler.execute(update);
-            } catch (InvalidCommandException | NumberFormatException e) {
+            } catch (InvalidCommandException e) {
                 log.warn("Invalid command format");
                 handler.sendText(update.getMessage().getChatId(), "Invalid command format. Use " + handler.getName() + " " + handler.getDescription());
             }

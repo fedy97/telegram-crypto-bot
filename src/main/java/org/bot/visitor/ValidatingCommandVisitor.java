@@ -15,30 +15,30 @@ public class ValidatingCommandVisitor implements CommandVisitor {
     @Override
     public void visitSavePortofolioLinkCommand() {
         String[] parts = update.getMessage().getText().split(" ");
-        if (parts.length != 3) {
+        if (parts.length != 3)
             throw new InvalidCommandException();
-        }
         String link = parts[2];
-        if (!link.contains("coingecko.com/it/portfolios/public/")) {
+        if (!link.contains("coingecko.com/it/portfolios/public/"))
             throw new InvalidCommandException();
-        }
     }
 
     @Override
     public void visitSaveCoinCommand() {
         String[] parts = update.getMessage().getText().split(" ");
-        if (parts.length != 3) {
+        if (parts.length != 3)
+            throw new InvalidCommandException();
+        try {
+            Double.parseDouble(parts[2].replace(",", "."));
+        } catch (NumberFormatException e) {
             throw new InvalidCommandException();
         }
-        Double.parseDouble(parts[2].replace(",", "."));
     }
 
     @Override
     public void visitDeleteCoinCommand() {
         String[] parts = update.getMessage().getText().split(" ");
-        if (parts.length != 2) {
+        if (parts.length != 2)
             throw new InvalidCommandException();
-        }
     }
 
     @Override
