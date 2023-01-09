@@ -19,6 +19,7 @@ public class Coin {
     private String coinName;
     private String ticker;
     private double price;
+    private String link;
     private String change24;
     private String multiplier;
 
@@ -30,13 +31,14 @@ public class Coin {
         this.price = 0.0;
         this.change24 = "0%";
         this.multiplier = "";
+        this.link = "";
     }
 
     @Override
     public String toString() {
         if (sb.length() > 0)
             sb.setLength(0);
-        sb.append(coinName);
+        sb.append(Utils.addLink(coinName, link));
         sb.append(" (");
         Utils.wrapStringWith(sb, ticker, "*");
         sb.append("): ");

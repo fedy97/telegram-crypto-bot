@@ -1,4 +1,4 @@
-package org.bot.utils;
+package org.bot.utils.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 

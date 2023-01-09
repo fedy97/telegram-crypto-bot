@@ -1,4 +1,4 @@
-package org.bot.utils;
+package org.bot.utils.exceptions;
 
 public class InvalidCommandException extends RuntimeException{
     public InvalidCommandException() {

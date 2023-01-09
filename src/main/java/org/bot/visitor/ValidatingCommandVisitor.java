@@ -1,7 +1,7 @@
 package org.bot.visitor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bot.utils.InvalidCommandException;
+import org.bot.utils.exceptions.InvalidCommandException;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j

@@ -13,6 +13,7 @@ public class CoinFactory {
         try {
             coin.setCoinName(raw.split(" ")[0]);
             coin.setTicker(raw.split("\\(")[1].split("\\)")[0]);
+            coin.setLink("https://www.coingecko.com" + raw.split("\"width: 115px;\" href=\"")[1].split("\"")[0]);
             coin.setPrice(Double.parseDouble(raw.split("<td data-sort='")[1].split("'")[0]));
             coin.setChange24(raw.split("data-show-solid-arrow=\"false\">")[2].split("<")[0]);
         } catch (Exception e) {

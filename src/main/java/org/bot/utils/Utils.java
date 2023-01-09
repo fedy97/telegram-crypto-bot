@@ -32,6 +32,10 @@ public class Utils {
         sb.append(wrapper);
     }
 
+    public static String addLink(String text, String link) {
+        return "[" + text + "]" + "(" + link + ")";
+    }
+
     public static String findEmoji(double change) {
         if (change >= 50)
             return EmojiParser.parseToUnicode(":rocket:");

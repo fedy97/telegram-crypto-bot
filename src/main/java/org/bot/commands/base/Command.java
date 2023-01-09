@@ -15,6 +15,7 @@ public interface Command extends CommandVisitable {
         message.setChatId(chatId);
         message.setText(response);
         message.setParseMode("Markdown");
+        message.disableWebPagePreview();
         try {
             MyBot.getInstance().execute(message);
         } catch (Exception e) {
