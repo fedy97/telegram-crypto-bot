@@ -8,6 +8,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.bot.models.Coin;
 import org.bot.models.Portfolio;
+import org.bot.models.factory.CoinFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class CoingeckoFacade {
             String responseBody = EntityUtils.toString(response.getEntity());
             String[] coinsRaw = responseBody.split("<img class=\"lazy\" alt=\"");
             for (int i = 1; i < coinsRaw.length; i = i + 2)
-                coins.add(Coin.fromRawCoin(coinsRaw[i]));
+                coins.add(CoinFactory.fromRawCoin(coinsRaw[i]));
         } catch (Exception e) {
             log.error("Error in fetching resource");
         }
