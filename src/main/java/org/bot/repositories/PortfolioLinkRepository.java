@@ -48,6 +48,7 @@ public class PortfolioLinkRepository implements Repository<PortfolioLink>, DataF
                 .append("link", link.getLink())
                 .append("name", link.getName());
         links.insertOne(doc);
+        log.info("saved on repo");
     }
 
     @Override

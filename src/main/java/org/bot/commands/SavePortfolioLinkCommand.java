@@ -21,7 +21,6 @@ public class SavePortfolioLinkCommand extends Notifier<PortfolioLink> implements
         super();
         registerObserver(PortfolioLinkCache.getInstance());
         registerObserver(PortfolioLinkRepository.getInstance());
-        registerObserver(CommandProcessor.getInstance());
     }
 
     @Override
@@ -35,6 +34,7 @@ public class SavePortfolioLinkCommand extends Notifier<PortfolioLink> implements
         UpdateRequest<PortfolioLink> updateRequest = new UpdateRequest<>();
         updateRequest.setEntity(portfolioLink);
         notifyObservers(new AddAction<>(updateRequest));
+        CommandProcessor.getInstance().registerPortfolioCommands();
         CommandHandler.getInstance().commands().get("/help").execute(update);
     }
 

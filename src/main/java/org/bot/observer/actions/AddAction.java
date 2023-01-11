@@ -1,6 +1,5 @@
 package org.bot.observer.actions;
 
-import org.bot.commands.base.CommandProcessor;
 import org.bot.observer.UpdateRequest;
 import org.bot.utils.Data;
 
@@ -14,8 +13,4 @@ public class AddAction<T> extends Action<T> {
         subject.save(updateRequest.getEntity());
     }
 
-    @Override
-    public void updateCommands(CommandProcessor commandProcessor) {
-        commandProcessor.registerPortfolioCommands();
-    }
 }

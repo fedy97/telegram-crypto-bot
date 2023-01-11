@@ -1,10 +1,11 @@
 package org.bot.cache.base;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bot.utils.Data;
 
 import java.lang.reflect.Field;
 import java.util.List;
-
+@Slf4j
 public abstract class Cache<T> implements Data<T> {
 
     protected List<T> cacheStore;
@@ -17,8 +18,9 @@ public abstract class Cache<T> implements Data<T> {
         this.cacheStore.addAll(toCache);
     }
 
-    public void save(T coin) {
-        this.cacheStore.add(coin);
+    public void save(T entity) {
+        this.cacheStore.add(entity);
+        log.info("saved on cache");
     }
 
     public List<T> findAll() {
