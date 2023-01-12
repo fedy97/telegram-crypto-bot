@@ -27,10 +27,8 @@ public class CommandProcessor {
     public void registerPortfolioCommands() {
         // fetch all portfolio links and put them in cache
         List<PortfolioLink> portfolioLinks = PortfolioLinkFetcherFactory.getInstance().createDataFetcher().fetchAll();
-        log.info(portfolioLinks.toString());
         // register all links available in cache
         for (PortfolioLink portfolioLink : portfolioLinks) {
-            log.info(portfolioLink.getName());
             if (!commandHandler.commands().containsKey(portfolioLink.getName()))
                 // here we need to create the customizable command for portfolio,
                 // then we delegate the register process to the handler

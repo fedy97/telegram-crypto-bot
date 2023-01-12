@@ -20,7 +20,6 @@ public abstract class Cache<T> implements Data<T> {
 
     public void save(T entity) {
         this.cacheStore.add(entity);
-        log.info("saved on cache");
     }
 
     public List<T> findAll() {
