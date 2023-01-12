@@ -20,7 +20,8 @@
 
 - [x] Command (to handle the Telegram commands)
 - [x] Singleton (to reuse objects and spare memory and for the caching system)
-- [x] Decorator (to add additional behaviour: 1. put in cache the data fetched from db 2. authorization check for some commands)
+- [x] Decorator (authorization check for some commands)
+- [x] Proxy (caching system)
 - [x] Facade (to hide Coingecko operations to build the portfolio)
 - [x] Factory (to create the right strategy)
 - [x] Strategy (to change behaviour based on 1. add/delete/deleteall actions 2. fetch from db/cache)

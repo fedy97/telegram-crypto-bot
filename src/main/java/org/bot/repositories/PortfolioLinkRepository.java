@@ -10,7 +10,6 @@ import org.bot.observer.actions.Action;
 import org.bot.repositories.base.Repository;
 import org.bot.utils.MongoConfig;
 import org.bot.utils.Utils;
-import org.bot.utils.fetchers.base.DataFetcher;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class PortfolioLinkRepository implements Repository<PortfolioLink>, DataFetcher<PortfolioLink>, Observer<PortfolioLink> {
+public class PortfolioLinkRepository implements Repository<PortfolioLink>, Observer<PortfolioLink> {
 
     private static final String COLLECTION_NAME = "portfolio_links";
     private static PortfolioLinkRepository instance;
@@ -74,11 +73,6 @@ public class PortfolioLinkRepository implements Repository<PortfolioLink>, DataF
     @Override
     public void deleteAll() {
         links.deleteMany(new Document());
-    }
-
-    @Override
-    public List<PortfolioLink> fetchAll() {
-        return findAll();
     }
 
     @Override

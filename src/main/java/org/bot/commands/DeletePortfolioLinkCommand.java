@@ -1,7 +1,7 @@
 package org.bot.commands;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bot.cache.PortfolioLinkCache;
+import org.bot.cache.PortfolioLinkCacheProxy;
 import org.bot.commands.base.Command;
 import org.bot.commands.base.CommandHandler;
 import org.bot.commands.base.CommandProcessor;
@@ -19,7 +19,7 @@ public class DeletePortfolioLinkCommand extends Notifier<PortfolioLink> implemen
 
     public DeletePortfolioLinkCommand() {
         super();
-        registerObserver(PortfolioLinkCache.getInstance());
+        registerObserver(PortfolioLinkCacheProxy.getInstance());
         registerObserver(PortfolioLinkRepository.getInstance());
     }
 

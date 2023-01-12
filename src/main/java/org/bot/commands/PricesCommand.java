@@ -1,9 +1,8 @@
 package org.bot.commands;
 
+import org.bot.cache.CoinCacheProxy;
 import org.bot.commands.base.Command;
 import org.bot.models.Coin;
-import org.bot.utils.fetchers.CoinFetcherFactory;
-import org.bot.utils.fetchers.base.DataFetcher;
 import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -19,8 +18,7 @@ public class PricesCommand implements Command {
 
     @Override
     public void execute(Update update) throws TelegramApiException {
-        DataFetcher<Coin> dataFetcher = CoinFetcherFactory.getInstance().createDataFetcher();
-        List<Coin> coins = dataFetcher.fetchAll();
+        List<Coin> coins = CoinCacheProxy.getInstance().findAll();
         StringBuilder response = new StringBuilder();
         for (Coin coin : coins)
             response.append(coin.toShortString());

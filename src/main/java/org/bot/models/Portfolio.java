@@ -1,8 +1,7 @@
 package org.bot.models;
 
+import org.bot.cache.CoinCacheProxy;
 import org.bot.utils.Utils;
-import org.bot.utils.fetchers.CoinFetcherFactory;
-import org.bot.utils.fetchers.base.DataFetcher;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,8 +14,7 @@ public class Portfolio {
 
     public Portfolio(List<Coin> coins) {
         this.coins = coins;
-        DataFetcher<Coin> dataFetcher = CoinFetcherFactory.getInstance().createDataFetcher();
-        List<Coin> bp = dataFetcher.fetchAll();
+        List<Coin> bp = CoinCacheProxy.getInstance().findAll();
         this.buyPrices = bp.stream()
                 .collect(Collectors.toMap(
                         Coin::getTicker,

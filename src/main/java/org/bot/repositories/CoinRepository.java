@@ -10,7 +10,6 @@ import org.bot.observer.actions.Action;
 import org.bot.repositories.base.Repository;
 import org.bot.utils.MongoConfig;
 import org.bot.utils.Utils;
-import org.bot.utils.fetchers.base.DataFetcher;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class CoinRepository implements Repository<Coin>, DataFetcher<Coin>, Observer<Coin> {
+public class CoinRepository implements Repository<Coin>, Observer<Coin> {
 
     private static final String COLLECTION_NAME = "coins";
     private static CoinRepository instance;
@@ -74,11 +73,6 @@ public class CoinRepository implements Repository<Coin>, DataFetcher<Coin>, Obse
     @Override
     public void deleteAll() {
         coins.deleteMany(new Document());
-    }
-
-    @Override
-    public List<Coin> fetchAll() {
-        return findAll();
     }
 
     @Override

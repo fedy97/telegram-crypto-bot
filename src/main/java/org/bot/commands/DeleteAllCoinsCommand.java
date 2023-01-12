@@ -1,6 +1,6 @@
 package org.bot.commands;
 
-import org.bot.cache.CoinCache;
+import org.bot.cache.CoinCacheProxy;
 import org.bot.commands.base.Command;
 import org.bot.models.Coin;
 import org.bot.observer.Notifier;
@@ -16,7 +16,7 @@ public class DeleteAllCoinsCommand extends Notifier<Coin> implements Command {
 
     public DeleteAllCoinsCommand() {
         super();
-        registerObserver(CoinCache.getInstance());
+        registerObserver(CoinCacheProxy.getInstance());
         registerObserver(CoinRepository.getInstance());
     }
 

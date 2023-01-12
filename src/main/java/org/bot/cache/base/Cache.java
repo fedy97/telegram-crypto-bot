@@ -13,17 +13,8 @@ public abstract class Cache<T> implements Data<T> {
         return this.cacheStore.isEmpty();
     }
 
-    public void saveAll(List<T> toCache) {
-        this.cacheStore.clear();
-        this.cacheStore.addAll(toCache);
-    }
-
     public void save(T entity) {
         this.cacheStore.add(entity);
-    }
-
-    public List<T> findAll() {
-        return this.cacheStore;
     }
 
     public void deleteByValue(String column, String val) {
