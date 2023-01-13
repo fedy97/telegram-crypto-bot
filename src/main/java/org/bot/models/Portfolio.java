@@ -2,7 +2,7 @@ package org.bot.models;
 
 import org.bot.cache.CacheFlyWeight;
 import org.bot.repositories.CoinRepository;
-import org.bot.utils.Utils;
+import org.bot.utils.NumberOperations;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,7 +31,7 @@ public class Portfolio {
         for (Coin coin : coins) {
             if (buyPrices.containsKey(coin.getTicker())) {
                 Double buyPriceCoin = buyPrices.get(coin.getTicker());
-                coin.setMultiplier(Utils.roundFloat(coin.getPrice() / buyPriceCoin, 1) + "x");
+                coin.setMultiplier(NumberOperations.roundFloat(coin.getPrice() / buyPriceCoin, 1) + "x");
             }
         }
     }

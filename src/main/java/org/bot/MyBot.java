@@ -5,7 +5,7 @@ import org.bot.commands.*;
 import org.bot.commands.base.AuthorizedCommandDecorator;
 import org.bot.commands.base.CommandHandler;
 import org.bot.commands.base.CommandProcessor;
-import org.bot.utils.Utils;
+import org.bot.utils.EnvVars;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -53,13 +53,13 @@ public class MyBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         // Return the bot's username
-        return Utils.getEnvVar("TELEGRAM_BOT_NAME");
+        return EnvVars.getEnvVar("TELEGRAM_BOT_NAME");
     }
 
     @Override
     public String getBotToken() {
         // Return the bot's token
-        return Utils.getEnvVar("TELEGRAM_BOT_TOKEN");
+        return EnvVars.getEnvVar("TELEGRAM_BOT_TOKEN");
     }
 
 }

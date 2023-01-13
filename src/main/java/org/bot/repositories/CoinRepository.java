@@ -8,8 +8,8 @@ import org.bot.models.Coin;
 import org.bot.observer.Observer;
 import org.bot.observer.actions.Action;
 import org.bot.repositories.base.Repository;
+import org.bot.utils.EnvVars;
 import org.bot.utils.MongoConfig;
-import org.bot.utils.Utils;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -37,7 +37,7 @@ public class CoinRepository implements Repository<Coin>, Observer<Coin> {
 
     @Override
     public String getCollectionName() {
-        String collectionName = Utils.getEnvVar("COINS_COLLECTION");
+        String collectionName = EnvVars.getEnvVar("COINS_COLLECTION");
         return collectionName != null && collectionName.length() > 0 ? collectionName : COLLECTION_NAME;
     }
 

@@ -3,7 +3,9 @@ package org.bot.models;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.bot.utils.Utils;
+import org.bot.utils.EmojiFactory;
+import org.bot.utils.NumberOperations;
+import org.bot.utils.formatters.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -38,16 +40,16 @@ public class Coin {
     public String toString() {
         if (sb.length() > 0)
             sb.setLength(0);
-        sb.append(Utils.addLink(coinName, link));
+        sb.append(new ToLinkDecorator(coinName, link));
         sb.append(" (");
-        Utils.wrapStringWith(sb, ticker, "*");
+        sb.append(new ToBoldDecorator(ticker));
         sb.append("): ");
-        Utils.wrapStringWith(sb, "$", "`");
-        Utils.wrapStringWith(sb, Utils.roundFloat(price, 4).toString(), "`");
+        sb.append(new ToCodeDecorator("$"));
+        sb.append(new ToCodeDecorator(NumberOperations.roundFloat(price, 4).toString()));
         sb.append(" (");
-        Utils.wrapStringWith(sb, change24, "_");
+        sb.append(new ToItalicDecorator(change24));
         sb.append(") ");
-        sb.append(Utils.findEmoji(Double.parseDouble(change24.substring(0, change24.length() - 1))));
+        sb.append(EmojiFactory.findEmoji(Double.parseDouble(change24.substring(0, change24.length() - 1))));
         sb.append(" ").append(multiplier);
         sb.append("\n");
         return sb.toString();
@@ -56,9 +58,9 @@ public class Coin {
     public String toShortString() {
         if (sb.length() > 0)
             sb.setLength(0);
-        Utils.wrapStringWith(sb, ticker, "*");
+        sb.append(new ToBoldDecorator(ticker));
         sb.append(": ");
-        Utils.wrapStringWith(sb, Utils.roundFloat(price, 5).toString(), "`");
+        sb.append(new ToCodeDecorator(NumberOperations.roundFloat(price, 5).toString()));
         sb.append("\n");
         return sb.toString();
     }

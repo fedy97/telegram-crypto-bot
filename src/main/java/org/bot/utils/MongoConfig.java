@@ -5,7 +5,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 
 public class MongoConfig {
-    private static final String DEFAULT_URL = Utils.getEnvVar("MONGO_DB_URI");
+    private static final String DEFAULT_URL = EnvVars.getEnvVar("MONGO_DB_URI");
     private static final String DEFAULT_DATABASE = "coins";
 
     private static MongoConfig instance;

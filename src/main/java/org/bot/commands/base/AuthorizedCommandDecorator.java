@@ -1,7 +1,7 @@
 package org.bot.commands.base;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bot.utils.Utils;
+import org.bot.utils.EnvVars;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -35,7 +35,7 @@ public class AuthorizedCommandDecorator extends CommandDecorator {
 
     private boolean isAuthorized(Update update) {
         String username = update.getMessage().getFrom().getUserName();
-        return username != null && username.equals(Utils.getEnvVar("TG_ADMIN"));
+        return username != null && username.equals(EnvVars.getEnvVar("TG_ADMIN"));
     }
 
 }
