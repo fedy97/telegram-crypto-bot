@@ -1,9 +1,10 @@
 package org.bot.commands.base;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bot.cache.PortfolioLinkCacheProxy;
+import org.bot.cache.CacheFlyWeight;
 import org.bot.commands.PortfolioCommand;
 import org.bot.models.PortfolioLink;
+import org.bot.repositories.PortfolioLinkRepository;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class CommandProcessor {
 
     public void registerPortfolioCommands() {
         // fetch all portfolio links and put them in cache
-        List<PortfolioLink> portfolioLinks = PortfolioLinkCacheProxy.getInstance().findAll();
+        List<PortfolioLink> portfolioLinks = CacheFlyWeight.getInstance(PortfolioLink.class, PortfolioLinkRepository.getInstance()).findAll();
         // register all links available in cache
         for (PortfolioLink portfolioLink : portfolioLinks) {
             if (!commandHandler.commands().containsKey(portfolioLink.getName()))

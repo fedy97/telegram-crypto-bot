@@ -1,7 +1,7 @@
 package org.bot.commands;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bot.cache.CoinCacheProxy;
+import org.bot.cache.CacheFlyWeight;
 import org.bot.commands.base.Command;
 import org.bot.models.Coin;
 import org.bot.observer.Notifier;
@@ -17,7 +17,7 @@ public class SaveCoinCommand extends Notifier<Coin> implements Command {
 
     public SaveCoinCommand() {
         super();
-        registerObserver(CoinCacheProxy.getInstance());
+        registerObserver(CacheFlyWeight.getInstance(Coin.class, CoinRepository.getInstance()));
         registerObserver(CoinRepository.getInstance());
     }
 

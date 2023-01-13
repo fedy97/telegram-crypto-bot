@@ -1,6 +1,7 @@
 package org.bot.models;
 
-import org.bot.cache.CoinCacheProxy;
+import org.bot.cache.CacheFlyWeight;
+import org.bot.repositories.CoinRepository;
 import org.bot.utils.Utils;
 
 import java.util.*;
@@ -14,7 +15,7 @@ public class Portfolio {
 
     public Portfolio(List<Coin> coins) {
         this.coins = coins;
-        List<Coin> bp = CoinCacheProxy.getInstance().findAll();
+        List<Coin> bp = CacheFlyWeight.getInstance(Coin.class, CoinRepository.getInstance()).findAll();
         this.buyPrices = bp.stream()
                 .collect(Collectors.toMap(
                         Coin::getTicker,
