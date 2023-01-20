@@ -28,6 +28,8 @@ public class NotifyPercentageChangeTask extends Task<CoinNotify> {
     @Override
     public void run() {
         List<CoinNotify> coinsToCheck = CacheFlyWeight.getInstance(CoinNotify.class, CoinNotifyRepository.getInstance()).findAll();
+        if (coinsToCheck.isEmpty())
+            return;
         List<PortfolioLink> portfolios = CacheFlyWeight.getInstance(PortfolioLink.class, PortfolioLinkRepository.getInstance()).findAll();
         Portfolio portfolio = CoingeckoFacade.getInstance().getCoingeckoPortfolio(portfolios.get(0).getLink());
         try {
