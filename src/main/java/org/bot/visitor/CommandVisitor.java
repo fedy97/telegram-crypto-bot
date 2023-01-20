@@ -7,4 +7,6 @@ public interface CommandVisitor {
     void visitDeleteCoinCommand();
 
     void visitDeletePortfolioLinkCommand();
+
+    void visitSaveCoinNotifyCommand();
 }

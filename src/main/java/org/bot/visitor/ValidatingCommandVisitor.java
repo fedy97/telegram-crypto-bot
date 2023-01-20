@@ -45,4 +45,16 @@ public class ValidatingCommandVisitor implements CommandVisitor {
     public void visitDeletePortfolioLinkCommand() {
         visitDeleteCoinCommand();
     }
+
+    @Override
+    public void visitSaveCoinNotifyCommand() {
+        String[] parts = update.getMessage().getText().split(" ");
+        if (parts.length != 3)
+            throw new InvalidCommandException();
+        try {
+            Integer.parseInt(parts[2]);
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandException();
+        }
+    }
 }

@@ -3,7 +3,8 @@ package org.bot.cache;
 import lombok.extern.slf4j.Slf4j;
 import org.bot.observer.Observer;
 import org.bot.observer.actions.Action;
-import org.bot.utils.Data;
+import org.bot.repositories.base.Repository;
+import org.bot.utils.Store;
 import org.bot.utils.exceptions.InvalidCommandException;
 
 import java.lang.reflect.Field;
@@ -13,19 +14,19 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-public class CacheFlyWeight<T> implements Data<T>, Observer<T> {
+public class CacheFlyWeight<T> implements Store<T>, Observer<T> {
     private static final Map<Class<?>, CacheFlyWeight<?>> cacheMap = new HashMap<>();
     private final List<T> cacheStore;
 
-    private final Data<T> repository;
+    private final Repository<T> repository;
 
-    private CacheFlyWeight(Data<T> repository) {
+    private CacheFlyWeight(Repository<T> repository) {
         this.repository = repository;
         this.cacheStore = new ArrayList<>();
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> CacheFlyWeight<T> getInstance(Class<T> type, Data<T> repository) {
+    public static <T> CacheFlyWeight<T> getInstance(Class<T> type, Repository<T> repository) {
         return (CacheFlyWeight<T>) cacheMap.computeIfAbsent(type, t -> new CacheFlyWeight<>(repository));
     }
 
@@ -50,11 +51,13 @@ public class CacheFlyWeight<T> implements Data<T>, Observer<T> {
     }
 
     public void deleteByValue(String column, String val) {
+        if (column.equals("_id"))
+            column = column.substring(1);
         for (int i = 0; i < cacheStore.size(); i++) {
             T entity = this.cacheStore.get(i);
             Class<?> cls = entity.getClass();
             try {
-                Field field = cls.getDeclaredField(column);
+                Field field = cls.getField(column);
                 field.setAccessible(true);
                 Object attributeValue = field.get(entity);
                 if (attributeValue.equals(val)) {

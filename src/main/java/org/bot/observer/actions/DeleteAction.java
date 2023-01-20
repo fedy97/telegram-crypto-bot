@@ -1,7 +1,7 @@
 package org.bot.observer.actions;
 
 import org.bot.observer.UpdateRequest;
-import org.bot.utils.Data;
+import org.bot.utils.Store;
 
 public class DeleteAction<T> extends Action<T>{
     public DeleteAction(UpdateRequest<T> updateRequest) {
@@ -9,7 +9,7 @@ public class DeleteAction<T> extends Action<T>{
     }
 
     @Override
-    public void updateData(Data<T> subject) {
+    public void updateData(Store<T> subject) {
         subject.deleteByValue(updateRequest.getCol(), updateRequest.getVal());
     }
 

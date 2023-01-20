@@ -17,7 +17,7 @@ import javax.persistence.Id;
 public class Coin {
 
     @Id
-    private String id;
+    public String id;
     private String coinName;
     private String ticker;
     private double price;

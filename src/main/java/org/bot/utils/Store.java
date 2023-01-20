@@ -2,7 +2,7 @@ package org.bot.utils;
 
 import java.util.List;
 
-public interface Data<T> {
+public interface Store<T> {
     void save(T t);
     List<T> findAll();
 

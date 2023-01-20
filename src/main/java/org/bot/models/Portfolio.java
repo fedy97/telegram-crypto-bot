@@ -1,5 +1,6 @@
 package org.bot.models;
 
+import lombok.Getter;
 import org.bot.cache.CacheFlyWeight;
 import org.bot.repositories.CoinRepository;
 import org.bot.utils.NumberOperations;
@@ -9,11 +10,12 @@ import java.util.stream.Collectors;
 
 public class Portfolio {
 
-    private final List<Coin> coins;
+    @Getter
+    private final Map<String, Coin> coins;
     private final Map<String, Double> buyPrices;
     private final StringBuilder sb;
 
-    public Portfolio(List<Coin> coins) {
+    public Portfolio(Map<String, Coin> coins) {
         this.coins = coins;
         List<Coin> bp = CacheFlyWeight.getInstance(Coin.class, CoinRepository.getInstance()).findAll();
         this.buyPrices = bp.stream()
@@ -28,7 +30,7 @@ public class Portfolio {
     }
 
     private void addMultipliers() {
-        for (Coin coin : coins) {
+        for (Coin coin : coins.values()) {
             if (buyPrices.containsKey(coin.getTicker())) {
                 Double buyPriceCoin = buyPrices.get(coin.getTicker());
                 coin.setMultiplier(NumberOperations.roundFloat(coin.getPrice() / buyPriceCoin, 1) + "x");
@@ -40,21 +42,21 @@ public class Portfolio {
     public String toString() {
         if (sb.length() > 0)
             sb.setLength(0);
-        for (Coin coin : coins) {
+        for (Coin coin : coins.values()) {
             sb.append(coin.toString());
         }
         return sb.toString();
     }
 
     public void sort() {
-        // find coins with empty multiplier
-        List<Coin> excludedCoins = coins.stream()
-                .filter(coin -> coin.getMultiplier().isEmpty())
-                .collect(Collectors.toList());
-        coins.removeAll(excludedCoins);
-        // sort coins by multiplier value
-        coins.sort((c1, c2) -> c2.getMultiplier().compareTo(c1.getMultiplier()));
-        // put at the end of the list the excluded coins
-        coins.addAll(excludedCoins);
+        List<Map.Entry<String, Coin>> entryList = coins.entrySet().stream().sorted(Comparator.comparingDouble((Map.Entry<String, Coin> coin) -> {
+            if (coin.getValue().getMultiplier().isEmpty())
+                return Double.NEGATIVE_INFINITY;
+            else
+                return Double.parseDouble(coin.getValue().getMultiplier().replace("x", ""));
+        }).reversed()).collect(Collectors.toList());
+        coins.clear();
+        for (Map.Entry<String, Coin> entry : entryList)
+            coins.put(entry.getKey(), entry.getValue());
     }
 }
