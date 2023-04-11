@@ -38,14 +38,14 @@ public class CoingeckoFacade {
             HttpGet request = new HttpGet(url);
             response = client.execute(request);
             String responseBody = EntityUtils.toString(response.getEntity());
-            String[] coinsRaw = responseBody.split("<img class=\"lazy\" alt=\"");
+            String[] coinsRaw = responseBody.split("<img loading=\"lazy\" alt=\"");
             for (int i = 1; i < coinsRaw.length; i = i + 2) {
                 Coin coin = CoinFactory.fromRawCoin(coinsRaw[i]);
                 coins.put(coin.getTicker().toUpperCase(), coin);
             }
         } catch (Exception e) {
-            log.error("Error in fetching resource");
-            throw new CoingeckoException();
+            //log.error("Error in fetching resource");
+            //throw new CoingeckoException();
         }
         return new Portfolio(coins);
     }
