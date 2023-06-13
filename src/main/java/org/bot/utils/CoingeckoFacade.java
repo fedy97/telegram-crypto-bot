@@ -12,8 +12,8 @@ import org.bot.models.Trending;
 import org.bot.models.factory.CoinFactory;
 import org.bot.utils.exceptions.CoingeckoException;
 
-
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Slf4j
 public class CoingeckoFacade {
@@ -43,9 +43,8 @@ public class CoingeckoFacade {
                 Coin coin = CoinFactory.fromRawCoin(coinsRaw[i]);
                 coins.put(coin.getTicker().toUpperCase(), coin);
             }
-        } catch (Exception e) {
-            //log.error("Error in fetching resource");
-            //throw new CoingeckoException();
+        } catch (Exception ignored) {
+            // ignored
         }
         return new Portfolio(coins);
     }
