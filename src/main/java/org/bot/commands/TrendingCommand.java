@@ -35,9 +35,4 @@ public class TrendingCommand implements Command {
         Trending trending = coingeckoFacade.getTrendingCoins();
         return trending.toString();
     }
-
-    @Override
-    public void accept(CommandVisitor visitor) {
-        // no need to be visited
-    }
 }

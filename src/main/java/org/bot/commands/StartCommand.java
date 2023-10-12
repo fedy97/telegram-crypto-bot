@@ -28,9 +28,4 @@ public class StartCommand implements Command {
     public String getDescription() {
         return "to show welcome message";
     }
-
-    @Override
-    public void accept(CommandVisitor visitor) {
-        // no need to be visited
-    }
 }

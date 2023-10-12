@@ -43,9 +43,4 @@ public class HelpCommand implements Command {
         }
         return sb.toString();
     }
-
-    @Override
-    public void accept(CommandVisitor visitor) {
-        // no need to be visited
-    }
 }

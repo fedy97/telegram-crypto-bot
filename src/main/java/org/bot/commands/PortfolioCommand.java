@@ -41,9 +41,4 @@ public class PortfolioCommand implements Command {
         portfolio.sort();
         return portfolio.toString();
     }
-
-    @Override
-    public void accept(CommandVisitor visitor) {
-        // no need to be visited
-    }
 }

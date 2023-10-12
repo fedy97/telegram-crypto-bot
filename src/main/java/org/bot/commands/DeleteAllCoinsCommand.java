@@ -35,9 +35,4 @@ public class DeleteAllCoinsCommand extends Notifier<Coin> implements Command {
     public String getDescription() {
         return "to delete all coins from DB";
     }
-
-    @Override
-    public void accept(CommandVisitor visitor) {
-        // no need to be visited
-    }
 }

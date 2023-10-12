@@ -37,9 +37,4 @@ public class PricesCommand implements Command {
     public String getDescription() {
         return "to show buy prices of all coins";
     }
-
-    @Override
-    public void accept(CommandVisitor visitor) {
-        // no need to be visited
-    }
 }
