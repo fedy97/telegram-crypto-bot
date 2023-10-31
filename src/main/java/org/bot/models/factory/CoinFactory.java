@@ -17,7 +17,7 @@ public class CoinFactory {
             coin.setPrice(Double.parseDouble(raw.split("<td data-sort=\"")[1].split("\"")[0]));
             coin.setChange24(raw.split("data-show-solid-arrow=\"false\" data-formatted=\"false\">")[2].split("<")[0]);
         } catch (Exception e) {
-            // continue
+            throw new RuntimeException(e);
         }
         return coin;
     }

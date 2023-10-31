@@ -1,14 +1,17 @@
 package org.bot.commands;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.bot.commands.base.Command;
 import org.bot.models.Portfolio;
 import org.bot.models.PortfolioLink;
 import org.bot.utils.CoingeckoFacade;
-import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Arrays;
+
+@Slf4j
 public class PortfolioCommand implements Command {
 
     @Getter
@@ -36,9 +39,14 @@ public class PortfolioCommand implements Command {
     }
 
     private String buildPortfolioResponse() {
-        CoingeckoFacade coingeckoFacade = CoingeckoFacade.getInstance();
-        Portfolio portfolio = coingeckoFacade.getCoingeckoPortfolio(getPortfolioLink().getLink());
-        portfolio.sort();
-        return portfolio.toString();
+        try {
+            CoingeckoFacade coingeckoFacade = CoingeckoFacade.getInstance();
+            Portfolio portfolio = coingeckoFacade.getCoingeckoPortfolio(getPortfolioLink().getLink());
+            portfolio.sort();
+            return portfolio.toString();
+        } catch (Exception e) {
+            log.error(Arrays.toString(e.getStackTrace()));
+            return e.getMessage();
+        }
     }
 }

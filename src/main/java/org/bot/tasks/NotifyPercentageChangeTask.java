@@ -14,6 +14,7 @@ import org.bot.tasks.base.Task;
 import org.bot.utils.CoingeckoFacade;
 import org.bot.utils.formatters.ToBoldDecorator;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -31,7 +32,12 @@ public class NotifyPercentageChangeTask extends Task<CoinNotify> {
         if (coinsToCheck.isEmpty())
             return;
         List<PortfolioLink> portfolios = CacheFlyWeight.getInstance(PortfolioLink.class, PortfolioLinkRepository.getInstance()).findAll();
-        Portfolio portfolio = CoingeckoFacade.getInstance().getCoingeckoPortfolio(portfolios.get(0).getLink());
+        Portfolio portfolio = null;
+        try {
+            portfolio = CoingeckoFacade.getInstance().getCoingeckoPortfolio(portfolios.get(0).getLink());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         try {
             int i = 0;
             while (i < coinsToCheck.size()) {
