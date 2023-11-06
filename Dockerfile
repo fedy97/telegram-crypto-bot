@@ -1,4 +1,4 @@
-FROM maven:3.6.3-openjdk-14-slim AS build
+FROM arm64v8/maven:3.6.3-openjdk-11-slim AS build
 RUN mkdir -p /workspace
 WORKDIR /workspace
 COPY pom.xml /workspace
