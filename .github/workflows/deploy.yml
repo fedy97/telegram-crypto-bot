@@ -31,7 +31,4 @@ jobs:
           port: 22
           script: |
             cd {{ secrets.TARGET_PATH }}
-            docker build -t telegram-crypto-bot .
-            docker stop telegram-crypto-bot || true
-            docker rm telegram-crypto-bot || true
-            docker run -d --name telegram-crypto-bot -p 80:80 telegram-crypto-bot
+            docker-compose up --build -d
