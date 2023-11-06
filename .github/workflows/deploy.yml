@@ -1,74 +1,37 @@
-name: Build and Deploy
+name: Deploy Node App with Docker
 
 on:
   push:
-    #branches: [ master ]
-    # Pattern matched against refs/tags
     tags:
       - '**'
 
 jobs:
-  build:
-
+  deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
+      - uses: actions/checkout@v3
 
-    - name: Cache the Maven packages to speed up build
-      uses: actions/cache@v1
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2
+      - name: Copy project to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "." # Copies the entire project directory
+          target: ${{ secrets.TARGET_PATH }}
 
-    - name: Build with Maven
-      run: mvn -B package -DskipTests --file pom.xml
-
-    - name: Create Staging Directory
-      run: mkdir staging && cp target/*.jar staging
-
-    - name: Publish Package
-      uses: actions/upload-artifact@v1
-      with:
-        name: app.jar
-        path: staging
-
-    - name: Docker Login
-      env:
-        DOCKER_USER: ${{secrets.DOCKER_USER}}
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      run:
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-
-    - name: Docker Push
-      env:
-        REPO: telegram-crypto-bot
-      run: |
-        docker build -t $REPO .
-        docker tag $REPO:latest ${{secrets.DOCKER_USER}}/$REPO:latest
-        docker push ${{secrets.DOCKER_USER}}/$REPO
-    - name: Docker Pull & Run from EC2 Instance
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{secrets.SSH_HOST}}
-        username: ${{secrets.SSH_USERNAME}}
-        key: ${{secrets.SSH_PRIVATE_KEY}}
-        port: 22
-        envs: GITHUB_SHA
-        script: |
-          docker login -u  ${{secrets.DOCKER_USER}} -p  ${{secrets.DOCKER_PASSWORD}}
-          cd telegram-crypto-bot
-          docker-compose pull
-          docker-compose up -d
-          docker rmi $(docker images -a | grep "<none>" | grep "${{secrets.DOCKER_USER}}/telegram-crypto-bot" | awk '{print $3}')
+      - name: Build and Run Docker Container on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd {{ secrets.TARGET_PATH }}
+            docker build -t telegram-crypto-bot .
+            docker stop telegram-crypto-bot || true
+            docker rm telegram-crypto-bot || true
+            docker run -d --name telegram-crypto-bot -p 80:80 telegram-crypto-bot
