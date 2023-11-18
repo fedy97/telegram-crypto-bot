@@ -10,6 +10,7 @@ import org.bot.models.Portfolio;
 import org.bot.models.Trending;
 import org.bot.models.factory.CoinFactory;
 import org.bot.utils.exceptions.CoingeckoException;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class CoingeckoFacade {
         return instance;
     }
 
-    public Portfolio getCoingeckoPortfolio(String url) throws RuntimeException {
+    public Portfolio getCoingeckoPortfolio(String url) {
         Map<String, Coin> coins = new LinkedHashMap<>();
         Response response = null;
         OkHttpClient client = new OkHttpClient();
@@ -43,22 +44,18 @@ public class CoingeckoFacade {
                 throw new CoingeckoException();
             String responseBody = response.body().string();
             String[] coinsRaw = responseBody.split("<img loading=\"lazy\" alt=\"");
-            for (int i = 1; i < coinsRaw.length; i = i + 2) {
-                try {
-                    Coin coin = CoinFactory.fromRawCoin(coinsRaw[i]);
-                    coins.put(coin.getTicker().toUpperCase(), coin);
-                } catch (Exception e) {
-                    log.warn("Coin number " + i + " ignored: " + e.getMessage());
-                    // ignore, go on
-                }
+            for (int i = 1; i < coinsRaw.length - 2; i = i + 2) {
+                Coin coin = CoinFactory.fromRawCoin(coinsRaw[i]);
+                coins.put(coin.getTicker().toUpperCase(), coin);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
+            throw new CoingeckoException();
         } finally {
-        if (response != null) {
-            response.close();
+            if (response != null) {
+                response.close();
+            }
         }
-    }
         return new Portfolio(coins);
     }
 

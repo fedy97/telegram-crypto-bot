@@ -45,7 +45,7 @@ public class CommandHandler {
                 // Execute the command
                 handler.execute(update);
             } catch (InvalidCommandException e) {
-                log.warn("Invalid command format");
+                log.warn(e.getMessage());
                 handler.sendText(update.getMessage().getChatId(), "Invalid command format. Use " + handler.getName() + " " + handler.getDescription());
             }
         }

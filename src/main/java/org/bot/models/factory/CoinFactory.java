@@ -1,7 +1,9 @@
 package org.bot.models.factory;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bot.models.Coin;
 
+@Slf4j
 public class CoinFactory {
 
     private CoinFactory() {
@@ -15,9 +17,9 @@ public class CoinFactory {
             coin.setTicker(raw.split("\\(")[1].split("\\)")[0]);
             coin.setLink("https://www.coingecko.com" + raw.split("\"width: 115px;\" href=\"")[1].split("\"")[0]);
             coin.setPrice(Double.parseDouble(raw.split("<td data-sort=\"")[1].split("\"")[0]));
-            coin.setChange24(raw.split("data-show-solid-arrow=\"false\" data-formatted=\"false\">")[2].split("<")[0]);
+            coin.setChange24(raw.split("data-formatted=\"false\">")[2].split("<")[0]);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.warn("some info for token ignored: " + e.getMessage());
         }
         return coin;
     }
