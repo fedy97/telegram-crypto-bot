@@ -32,7 +32,6 @@ jobs:
           port: 22
           script: |
             set -x
-            ls
             cd ${{ secrets.TARGET_PATH }}
             export TELEGRAM_BOT_NAME="${{ secrets.TELEGRAM_BOT_NAME }}"
             export TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}"
