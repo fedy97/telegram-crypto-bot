@@ -31,9 +31,11 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cat <<EOF > .env
-            TELEGRAM_BOT_NAME=${{ secrets.TELEGRAM_BOT_NAME }}
-            TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
-            TG_ADMIN=${{ secrets.TG_ADMIN }}
-            MONGO_DB_URI=${{ secrets.MONGO_DB_URI }}
-            EOF
+            set -x
+            ls
+            cd ${{ secrets.TARGET_PATH }}
+            export TELEGRAM_BOT_NAME="${{ secrets.TELEGRAM_BOT_NAME }}"
+            export TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}"
+            export TG_ADMIN="${{ secrets.TG_ADMIN }}"
+            export MONGO_DB_URI="${{ secrets.MONGO_DB_URI }}"
+            docker-compose up --build -d
