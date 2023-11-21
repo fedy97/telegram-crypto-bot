@@ -1,9 +1,9 @@
-name: Deploy Node App with Docker
+name: Deploy
 
 on:
   push:
-    tags:
-      - '**'
+    branches:
+      - master
 
 jobs:
   deploy:
@@ -21,6 +21,7 @@ jobs:
           port: 22
           source: "." # Copies the entire project directory
           target: ${{ secrets.TARGET_PATH }}
+          rm: true
 
       - name: Build and Run Docker Container on server
         uses: appleboy/ssh-action@master
@@ -31,4 +32,10 @@ jobs:
           port: 22
           script: |
             cd {{ secrets.TARGET_PATH }}
+            cat <<EOF > .env
+            TELEGRAM_BOT_NAME=${{ secrets.TELEGRAM_BOT_NAME }}
+            TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+            TG_ADMIN=${{ secrets.TG_ADMIN }}
+            MONGO_DB_URI=${{ secrets.MONGO_DB_URI }}
+            EOF
             docker-compose up --build -d

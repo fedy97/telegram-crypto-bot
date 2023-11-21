@@ -1,0 +1,12 @@
+version: '3'
+services:
+  project:
+    build: .
+    restart: unless-stopped
+    ports:
+      - 8181:8080
+    environment:
+      TELEGRAM_BOT_NAME: ${TELEGRAM_BOT_NAME}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TG_ADMIN: ${TG_ADMIN}
+      MONGO_DB_URI: ${MONGO_DB_URI}
