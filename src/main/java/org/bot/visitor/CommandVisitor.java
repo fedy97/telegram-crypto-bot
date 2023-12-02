@@ -9,4 +9,6 @@ public interface CommandVisitor {
     void visitDeletePortfolioLinkCommand();
 
     void visitSaveCoinNotifyCommand();
+
+    void visitWithdrawCommand();
 }

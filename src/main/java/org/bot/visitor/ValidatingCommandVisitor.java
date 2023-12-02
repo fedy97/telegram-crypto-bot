@@ -1,6 +1,7 @@
 package org.bot.visitor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bot.utils.EnvVars;
 import org.bot.utils.exceptions.InvalidCommandException;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -55,6 +56,24 @@ public class ValidatingCommandVisitor implements CommandVisitor {
             Integer.parseInt(parts[2]);
         } catch (NumberFormatException e) {
             throw new InvalidCommandException();
+        }
+    }
+
+    @Override
+    public void visitWithdrawCommand() {
+        // /withdraw kucoin USDT 1000 trc20 address
+        String[] parts = update.getMessage().getText().split(" ");
+        try {
+            Double.parseDouble(parts[3].replace(",", "."));
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandException();
+        }
+        if (EnvVars.getEnvVar("DEFAULT_ADDRESS") != null) {
+            if (parts.length != 6 && parts.length != 5)
+                throw new InvalidCommandException();
+        } else {
+            if (parts.length != 6)
+                throw new InvalidCommandException();
         }
     }
 }
