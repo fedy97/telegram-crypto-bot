@@ -61,19 +61,13 @@ public class ValidatingCommandVisitor implements CommandVisitor {
 
     @Override
     public void visitWithdrawCommand() {
-        // /withdraw kucoin USDT 1000 trc20 address
         String[] parts = update.getMessage().getText().split(" ");
+        if (parts.length != 6)
+            throw new InvalidCommandException();
         try {
             Double.parseDouble(parts[3].replace(",", "."));
         } catch (NumberFormatException e) {
             throw new InvalidCommandException();
-        }
-        if (EnvVars.getEnvVar("DEFAULT_ADDRESS") != null) {
-            if (parts.length != 6 && parts.length != 5)
-                throw new InvalidCommandException();
-        } else {
-            if (parts.length != 6)
-                throw new InvalidCommandException();
         }
     }
 }

@@ -5,6 +5,8 @@ import org.bot.commands.*;
 import org.bot.commands.base.AuthorizedCommandDecorator;
 import org.bot.commands.base.CommandHandler;
 import org.bot.commands.base.CommandProcessor;
+import org.bot.operations.KucoinOperations;
+import org.bot.operations.OperationsDispatcher;
 import org.bot.utils.EnvVars;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -29,8 +31,11 @@ public class MyBot extends TelegramLongPollingBot {
         commandHandler.register(new AuthorizedCommandDecorator(new DeleteCoinCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new SavePortfolioLinkCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new DeletePortfolioLinkCommand()));
+        commandHandler.register(new AuthorizedCommandDecorator(new WithdrawCommand()));
 
         CommandProcessor.getInstance().registerPortfolioCommands();
+
+        OperationsDispatcher.getInstance().register(new KucoinOperations());
     }
 
     public static MyBot getInstance() {
