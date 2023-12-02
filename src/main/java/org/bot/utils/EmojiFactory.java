@@ -11,7 +11,7 @@ public class EmojiFactory {
         if (change >= 10)
             return EmojiParser.parseToUnicode(":tada:");
         if (change <= -50)
-            return EmojiParser.parseToUnicode(":skull_and_crossbones:");
+            return EmojiParser.parseToUnicode(":skull:");
         if (change <= -10)
             return EmojiParser.parseToUnicode(":x:");
         return "";
