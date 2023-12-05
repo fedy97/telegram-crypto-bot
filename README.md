@@ -5,15 +5,16 @@
 ### Features:
 
 - [x] Built with [TelegramBots](https://github.com/rubenlagus/TelegramBots) in `Java`
-- [x] Track Coingecko Portfolio (see all your coins' current prices with `/portfolio`)
-- [x] MongoDB Integration (save your coins buy price with `/save`,`/delete`,`/deleteall`)
+- [x] Track Coingecko Portfolio (create it [here](https://www.coingecko.com/en/portfolio), copy the public address and save it in the bot with `/saveportfolio`, or delete it with `/deleteportfolio`)
+- [x] MongoDB Integration (save your coins buy price with `/save`,`/delete`,`/deleteall` and see their multipliers after have saved a portfolio)
+- [x] Coingecko Trending coins with `/trend` command
 - [x] Caching System
 - [x] Telegram Authorization
 - [x] Maven Build
 - [x] Dockerized image
-- [x] DockerHub upload
-- [x] Deployed on Oracle VPS
+- [x] Deployable on VPS
 - [x] Full CI/CD Flow with Actions
+- [x] Withdraw funds with Kucoin
 
 
 ### Design Patterns:
@@ -30,15 +31,41 @@
 - [x] Visitor (to validate commands)
 
 
-#### How to Use it:
+### How to Use it:
 
-To run the bot, you need to define the following Environmental Variables:
+To run the bot, you need to clone this prokect and define the following Environmental Variables:
 
 - `TELEGRAM_BOT_NAME` = Ask BotFather in Telegram
 - `TELEGRAM_BOT_TOKEN` = Ask BotFather in Telegram
 - `MONGO_DB_URI` = To connect to MongoDB
+- `TG_ADMIN` = Telegram username of the owner, you have to set yours otherwise some commands will not be authorized. Check below for a full list.
 - `COINS_COLLECTION` = Optional, name of the collection of your saved coins, default `coins`
 - `PORTFOLIO_LINKS_COLLECTION` = Optional, name of the collection of your coingecko portfolios, default `portfolio_links`
-- `TG_ADMIN` = Telegram username of the owner, you can set yours
+- `KUCOIN_API_KEY` = Optional, set it if you want to use Kucoin functions. [Create Kucoin Keys](https://www.kucoin.com/support/360015102174)
+- `KUCOIN_SECRET_KEY` = Optional, set it if you want to use Kucoin functions.
+- `KUCOIN_PASSPHRASE` = Optional, set it if you want to use Kucoin functions.
+
+You can start the bot with the command `docker-compose up --build -d`
 
 Then go to your instance of the Telegram bot and type `/start`
+
+### Commands
+#### Public Commands
+Here is the list of commands that do not require authorization, so every user can run these commands:
+
+- `/start`: welcome message
+- `/help`: lists of all available commands
+- `/trend`: shows Coingecko trending coins
+- `/<name of the saved portfolio>`: shows the list of the coins saved in the coingecko portfolio ([create it here](https://www.coingecko.com/en/portfolio))
+
+#### Authorized Commands
+Here is the list of commands that require authorization, defined by setting the `TG_ADMIN` environmental variable:
+
+- `/save`: it saves a coin buy price, for example `/save BTC 15000`. Prices are in $ so that they can be compared with the coingecko current prices, when you run the `/<portfolio name>` command
+- `/delete`: it deletes a coin buy price
+- `/saveportfolio`: it saves a coingecko portfolio, then you can fetch it by executing `/<portfolio name>`
+- `/deleteportfolio`: it deletes a portfolio
+- `/prices`: it lists all saved coins' buy prices
+- `/withdraw`: it withdraw funds from different platforms. Right now only Kucoin is available.
+
+
