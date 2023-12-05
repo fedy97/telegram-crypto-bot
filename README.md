@@ -47,7 +47,11 @@ To run the bot, you need to clone this prokect and define the following Environm
 
 You can start the bot with the command `docker-compose up --build -d`
 
-Then go to your instance of the Telegram bot and type `/start`
+Then go to your instance of the Telegram bot and type `/start`.
+
+#### Create a Coingecko portfolio
+Go [here](https://www.coingecko.com/en/portfolio) and create a public portfolio, like in the image below:
+<img width="1396" alt="image" src="https://github.com/fedy97/telegram-crypto-bot/assets/47827254/6fe64a47-bb2e-4476-b59f-48f1a269e42c">
 
 ### Commands
 #### Public Commands
@@ -56,7 +60,7 @@ Here is the list of commands that do not require authorization, so every user ca
 - `/start`: welcome message
 - `/help`: lists of all available commands
 - `/trend`: shows Coingecko trending coins
-- `/<name of the saved portfolio>`: shows the list of the coins saved in the coingecko portfolio ([create it here](https://www.coingecko.com/en/portfolio))
+- `/<name of the saved portfolio>`: shows the list of the coins saved in the coingecko portfolio
 
 #### Authorized Commands
 Here is the list of commands that require authorization, defined by setting the `TG_ADMIN` environmental variable:
@@ -67,5 +71,13 @@ Here is the list of commands that require authorization, defined by setting the 
 - `/deleteportfolio`: it deletes a portfolio
 - `/prices`: it lists all saved coins' buy prices
 - `/withdraw`: it withdraw funds from different platforms. Right now only Kucoin is available.
+
+#### Example Usage
+
+First, you add your coingecko portfolio to the bot, like this:
+<img width="348" alt="image" src="https://github.com/fedy97/telegram-crypto-bot/assets/47827254/70ab8df3-d586-4fce-b6b3-06f68fae1ef6">
+
+After that, you can call the portfolio command to show coins present in the coingecko portfolio, with some additional information:
+<img width="958" alt="image" src="https://github.com/fedy97/telegram-crypto-bot/assets/47827254/87051b40-1e56-4f5c-b7ee-fa3a8ace17bf">
 
 
