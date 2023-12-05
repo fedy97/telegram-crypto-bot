@@ -37,4 +37,7 @@ jobs:
             export TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}"
             export TG_ADMIN="${{ secrets.TG_ADMIN }}"
             export MONGO_DB_URI="${{ secrets.MONGO_DB_URI }}"
+            export KUCOIN_API_KEY="${{ secrets.KUCOIN_API_KEY }}"
+            export KUCOIN_SECRET_KEY="${{ secrets.KUCOIN_SECRET_KEY }}"
+            export KUCOIN_PASSPHRASE="${{ secrets.KUCOIN_PASSPHRASE }}"
             docker-compose up --build -d
