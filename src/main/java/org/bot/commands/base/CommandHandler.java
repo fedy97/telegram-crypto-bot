@@ -1,6 +1,7 @@
 package org.bot.commands.base;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bot.utils.exceptions.CommandExecutionException;
 import org.bot.utils.exceptions.InvalidCommandException;
 import org.bot.visitor.ValidatingCommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -26,27 +27,30 @@ public class CommandHandler {
         return instance;
     }
 
-    public void register(Command handler) {
-        commands.put(handler.getName(), handler);
+    public void register(Command command) {
+        commands.put(command.getName(), command);
     }
 
     public void unregister(String commandName) {
         commands.remove(commandName);
     }
 
-    public void handle(String command, Update update) throws TelegramApiException {
-        String firstWordCommand = command.split(" ")[0];
+    public void handle(String input, Update update) throws TelegramApiException {
+        String firstWordCommand = input.split(" ")[0];
         if (commands.containsKey(firstWordCommand)) {
-            log.info(update.getMessage().getFrom().getUserName() + ", " + update.getMessage().getFrom().getFirstName() + ": " + command);
-            Command handler = commands.get(firstWordCommand);
+            log.info(update.getMessage().getFrom().getUserName() + ", " + update.getMessage().getFrom().getFirstName() + ": " + input);
+            Command command = commands.get(firstWordCommand);
             try {
                 // Validate first the command
-                handler.accept(new ValidatingCommandVisitor(update));
+                command.accept(new ValidatingCommandVisitor(update));
                 // Execute the command
-                handler.execute(update);
+                command.execute(update);
             } catch (InvalidCommandException e) {
                 log.warn(e.getMessage());
-                handler.sendText(update.getMessage().getChatId(), "Invalid command format. Use " + handler.getName() + " " + handler.getDescription());
+                command.sendText(update.getMessage().getChatId(), e.getMessage() + ". Use " + command.getName() + " " + command.getDescription());
+            } catch (CommandExecutionException e) {
+                log.warn(e.getMessage());
+                command.sendText(update.getMessage().getChatId(), e.getMessage());
             }
         }
     }

@@ -1,7 +1,9 @@
 package org.bot.visitor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bot.operations.OperationsDispatcher;
 import org.bot.utils.exceptions.InvalidCommandException;
+import org.bot.utils.exceptions.PlatformNotAvailableException;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
@@ -55,6 +57,24 @@ public class ValidatingCommandVisitor implements CommandVisitor {
             Integer.parseInt(parts[2]);
         } catch (NumberFormatException e) {
             throw new InvalidCommandException();
+        }
+    }
+
+    @Override
+    public void visitWithdrawCommand() {
+        String[] parts = update.getMessage().getText().split(" ");
+        if (parts.length != 6)
+            throw new InvalidCommandException();
+        try {
+            Double.parseDouble(parts[3].replace(",", "."));
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandException();
+        }
+        String platform = parts[1];
+        try {
+            OperationsDispatcher.getInstance().getOperations(platform);
+        } catch (PlatformNotAvailableException e) {
+            throw new InvalidCommandException("Available platforms are: " + OperationsDispatcher.getInstance().getAvailablePlatforms());
         }
     }
 }
