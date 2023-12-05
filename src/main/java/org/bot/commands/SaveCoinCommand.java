@@ -8,6 +8,7 @@ import org.bot.observer.Notifier;
 import org.bot.observer.UpdateRequest;
 import org.bot.observer.actions.AddAction;
 import org.bot.repositories.CoinRepository;
+import org.bot.utils.MongoConfig;
 import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -17,6 +18,7 @@ public class SaveCoinCommand extends Notifier<Coin> implements Command {
 
     public SaveCoinCommand() {
         super();
+        if (!isUsable()) return;
         registerObserver(CacheFlyWeight.getInstance(Coin.class, CoinRepository.getInstance()));
         registerObserver(CoinRepository.getInstance());
     }
@@ -42,7 +44,12 @@ public class SaveCoinCommand extends Notifier<Coin> implements Command {
 
     @Override
     public String getDescription() {
-        return "<coin> to save a new coin with its buy price";
+        return "<coin> <amount> to save a new coin with its buy price";
+    }
+
+    @Override
+    public boolean isUsable() {
+        return MongoConfig.getInstance().isMongoUp();
     }
 
     @Override

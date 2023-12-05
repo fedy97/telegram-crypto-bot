@@ -38,7 +38,7 @@ public class PortfolioLinkRepository implements Repository<PortfolioLink>, Obser
     @Override
     public String getCollectionName() {
         String collectionName = EnvVars.getEnvVar("PORTFOLIO_LINKS_COLLECTION");
-        return collectionName != null && collectionName.length() > 0 ? collectionName : COLLECTION_NAME;
+        return collectionName != null && !collectionName.isEmpty() ? collectionName : COLLECTION_NAME;
     }
 
     @Override

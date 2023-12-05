@@ -12,4 +12,8 @@ public interface Command extends CommandVisitable, TelegramSender {
     String getName();
 
     String getDescription();
+
+    default boolean isUsable() {
+        return true;
+    }
 }

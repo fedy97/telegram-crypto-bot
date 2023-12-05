@@ -8,6 +8,7 @@ import org.bot.observer.Notifier;
 import org.bot.observer.UpdateRequest;
 import org.bot.observer.actions.DeleteAction;
 import org.bot.repositories.CoinRepository;
+import org.bot.utils.MongoConfig;
 import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -17,6 +18,7 @@ public class DeleteCoinCommand extends Notifier<Coin> implements Command {
 
     public DeleteCoinCommand() {
         super();
+        if (!isUsable()) return;
         registerObserver(CoinRepository.getInstance());
         registerObserver(CacheFlyWeight.getInstance(Coin.class, CoinRepository.getInstance()));
     }
@@ -40,6 +42,11 @@ public class DeleteCoinCommand extends Notifier<Coin> implements Command {
     @Override
     public String getDescription() {
         return "<coin> to delete a coin from DB";
+    }
+
+    @Override
+    public boolean isUsable() {
+        return MongoConfig.getInstance().isMongoUp();
     }
 
     @Override
