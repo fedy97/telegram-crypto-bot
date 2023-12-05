@@ -51,6 +51,7 @@ Then go to your instance of the Telegram bot and type `/start`.
 
 #### Create a Coingecko portfolio
 Go [here](https://www.coingecko.com/en/portfolio) and create a public portfolio, like in the image below:
+
 <img width="1396" alt="image" src="https://github.com/fedy97/telegram-crypto-bot/assets/47827254/6fe64a47-bb2e-4476-b59f-48f1a269e42c">
 
 ### Commands
@@ -75,9 +76,11 @@ Here is the list of commands that require authorization, defined by setting the 
 #### Example Usage
 
 First, you add your coingecko portfolio to the bot, like this:
+
 <img width="348" alt="image" src="https://github.com/fedy97/telegram-crypto-bot/assets/47827254/70ab8df3-d586-4fce-b6b3-06f68fae1ef6">
 
 After that, you can call the portfolio command to show coins present in the coingecko portfolio, with some additional information:
+
 <img width="958" alt="image" src="https://github.com/fedy97/telegram-crypto-bot/assets/47827254/87051b40-1e56-4f5c-b7ee-fa3a8ace17bf">
 
 
