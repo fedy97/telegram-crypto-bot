@@ -38,12 +38,12 @@ To run the bot, you need to clone this prokect and define the following Environm
 - `TELEGRAM_BOT_NAME` = Ask BotFather in Telegram
 - `TELEGRAM_BOT_TOKEN` = Ask BotFather in Telegram
 - `MONGO_DB_URI` = To connect to MongoDB
-- `TG_ADMIN` = Telegram username of the owner, you have to set yours otherwise some commands will not be authorized. Check below for a full list.
+- `TG_ADMIN` = Telegram username of the owner, you have to set yours otherwise some commands will not be authorized. Check below for a full list
 - `COINS_COLLECTION` = Optional, name of the collection of your saved coins, default `coins`
 - `PORTFOLIO_LINKS_COLLECTION` = Optional, name of the collection of your coingecko portfolios, default `portfolio_links`
 - `KUCOIN_API_KEY` = Optional, set it if you want to use Kucoin functions. [Create Kucoin Keys](https://www.kucoin.com/support/360015102174)
-- `KUCOIN_SECRET_KEY` = Optional, set it if you want to use Kucoin functions.
-- `KUCOIN_PASSPHRASE` = Optional, set it if you want to use Kucoin functions.
+- `KUCOIN_SECRET_KEY` = Optional, set it if you want to use Kucoin functions
+- `KUCOIN_PASSPHRASE` = Optional, set it if you want to use Kucoin functions
 
 You can start the bot with the command `docker-compose up --build -d`
 
