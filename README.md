@@ -37,8 +37,8 @@ To run the bot, you need to clone this prokect and define the following Environm
 
 - `TELEGRAM_BOT_NAME` = Ask BotFather in Telegram
 - `TELEGRAM_BOT_TOKEN` = Ask BotFather in Telegram
-- `MONGO_DB_URI` = To connect to MongoDB
-- `TG_ADMIN` = Telegram username of the owner, you have to set yours otherwise some commands will not be authorized. Check below for a full list
+- `MONGO_DB_URI` = Optional, To connect to MongoDB. Some commands requires this to be set, list is below
+- `TG_ADMIN` = Optional, Telegram username of the owner, you have to set yours otherwise some commands will not be authorized. Check below for a full list
 - `COINS_COLLECTION` = Optional, name of the collection of your saved coins, default `coins`
 - `PORTFOLIO_LINKS_COLLECTION` = Optional, name of the collection of your coingecko portfolios, default `portfolio_links`
 - `KUCOIN_API_KEY` = Optional, set it if you want to use Kucoin functions. [Create Kucoin Keys](https://www.kucoin.com/support/360015102174)
@@ -65,11 +65,11 @@ Here is the list of commands that do not require authorization, so every user ca
 #### Authorized Commands
 Here is the list of commands that require authorization, defined by setting the `TG_ADMIN` environmental variable:
 
-- `/save`: it saves a coin buy price, for example `/save BTC 15000`. Prices are in $ so that they can be compared with the coingecko current prices, when you run the `/<portfolio name>` command
-- `/delete`: it deletes a coin buy price
-- `/saveportfolio`: it saves a coingecko portfolio, then you can fetch it by executing `/<portfolio name>`
-- `/deleteportfolio`: it deletes a portfolio
-- `/prices`: it lists all saved coins' buy prices
+- `/save`: it saves a coin buy price, for example `/save BTC 15000`. Prices are in $ so that they can be compared with the coingecko current prices, when you run the `/<portfolio name>` command. (requires `MONGO_DB_URI`)
+- `/delete`: it deletes a coin buy price (requires `MONGO_DB_URI`)
+- `/saveportfolio`: it saves a coingecko portfolio, then you can fetch it by executing `/<portfolio name>` (requires `MONGO_DB_URI`)
+- `/deleteportfolio`: it deletes a portfolio (requires `MONGO_DB_URI`)
+- `/prices`: it lists all saved coins' buy prices (requires `MONGO_DB_URI`)
 - `/withdraw`: it withdraw funds from different platforms. Right now only Kucoin is available.
 
 #### Example Usage
