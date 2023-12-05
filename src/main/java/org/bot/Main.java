@@ -25,11 +25,11 @@ public class Main {
         botsApi.registerBot(MyBot.getInstance());
         log.info("Starting bot...");
 
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        TaskHandler invoker = new TaskHandler(executor);
+        /* ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+           TaskHandler invoker = new TaskHandler(executor);
 
-        Task<CoinNotify> coinNotifyTask = new NotifyPercentageChangeTask(10 * 60);
-        //invoker.invoke(coinNotifyTask);
+           Task<CoinNotify> coinNotifyTask = new NotifyPercentageChangeTask(10 * 60);
+           invoker.invoke(coinNotifyTask); */
 
     }
 }

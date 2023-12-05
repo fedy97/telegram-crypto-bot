@@ -28,7 +28,7 @@ public class CommandHandler {
     }
 
     public void register(Command command) {
-        commands.put(command.getName(), command);
+        if (command.isUsable()) commands.put(command.getName(), command);
     }
 
     public void unregister(String commandName) {

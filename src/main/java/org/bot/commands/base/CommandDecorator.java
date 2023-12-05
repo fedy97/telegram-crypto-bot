@@ -13,4 +13,9 @@ public abstract class CommandDecorator implements Command {
     public void accept(CommandVisitor visitor) {
         command.accept(visitor);
     }
+
+    @Override
+    public boolean isUsable() {
+        return command.isUsable();
+    }
 }

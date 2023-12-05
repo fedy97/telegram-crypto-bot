@@ -5,6 +5,7 @@ import org.bot.cache.CacheFlyWeight;
 import org.bot.commands.PortfolioCommand;
 import org.bot.models.PortfolioLink;
 import org.bot.repositories.PortfolioLinkRepository;
+import org.bot.utils.MongoConfig;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class CommandProcessor {
     }
 
     public void registerPortfolioCommands() {
+        if (!MongoConfig.getInstance().isMongoUp()) return;
         // fetch all portfolio links and put them in cache
         List<PortfolioLink> portfolioLinks = CacheFlyWeight.getInstance(PortfolioLink.class, PortfolioLinkRepository.getInstance()).findAll();
         // register all links available in cache

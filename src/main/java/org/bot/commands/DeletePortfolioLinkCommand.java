@@ -10,6 +10,7 @@ import org.bot.observer.Notifier;
 import org.bot.observer.UpdateRequest;
 import org.bot.observer.actions.DeleteAction;
 import org.bot.repositories.PortfolioLinkRepository;
+import org.bot.utils.MongoConfig;
 import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -19,6 +20,7 @@ public class DeletePortfolioLinkCommand extends Notifier<PortfolioLink> implemen
 
     public DeletePortfolioLinkCommand() {
         super();
+        if (!isUsable()) return;
         registerObserver(CacheFlyWeight.getInstance(PortfolioLink.class, PortfolioLinkRepository.getInstance()));
         registerObserver(PortfolioLinkRepository.getInstance());
     }
@@ -43,6 +45,11 @@ public class DeletePortfolioLinkCommand extends Notifier<PortfolioLink> implemen
     @Override
     public String getDescription() {
         return "<name> to delete a portfolio";
+    }
+
+    @Override
+    public boolean isUsable() {
+        return MongoConfig.getInstance().isMongoUp();
     }
 
     @Override

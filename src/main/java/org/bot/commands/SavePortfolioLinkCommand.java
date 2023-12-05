@@ -10,6 +10,7 @@ import org.bot.observer.Notifier;
 import org.bot.observer.UpdateRequest;
 import org.bot.observer.actions.AddAction;
 import org.bot.repositories.PortfolioLinkRepository;
+import org.bot.utils.MongoConfig;
 import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -19,6 +20,7 @@ public class SavePortfolioLinkCommand extends Notifier<PortfolioLink> implements
 
     public SavePortfolioLinkCommand() {
         super();
+        if (!isUsable()) return;
         registerObserver(CacheFlyWeight.getInstance(PortfolioLink.class, PortfolioLinkRepository.getInstance()));
         registerObserver(PortfolioLinkRepository.getInstance());
     }
@@ -46,6 +48,11 @@ public class SavePortfolioLinkCommand extends Notifier<PortfolioLink> implements
     @Override
     public String getName() {
         return "/saveportfolio";
+    }
+
+    @Override
+    public boolean isUsable() {
+        return MongoConfig.getInstance().isMongoUp();
     }
 
     @Override

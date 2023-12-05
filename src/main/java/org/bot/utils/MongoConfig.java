@@ -3,6 +3,7 @@ package org.bot.utils;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import lombok.Getter;
 
 public class MongoConfig {
     private static final String DEFAULT_URL = EnvVars.getEnvVar("MONGO_DB_URI");
@@ -10,14 +11,22 @@ public class MongoConfig {
 
     private static MongoConfig instance;
 
-    private final MongoClient mongoClient;
-    private final MongoDatabase database;
+    private MongoClient mongoClient;
+    @Getter
+    private MongoDatabase database;
+    @Getter
+    private boolean isMongoUp;
 
     private MongoConfig() {
         String url = System.getProperty("mongodb.url", DEFAULT_URL);
         String db = System.getProperty("mongodb.database", DEFAULT_DATABASE);
-        mongoClient = MongoClients.create(url);
-        this.database = mongoClient.getDatabase(db);
+        try {
+            this.mongoClient = MongoClients.create(url);
+            this.database = mongoClient.getDatabase(db);
+            this.isMongoUp = true;
+        } catch (Exception e) {
+            this.isMongoUp = false;
+        }
     }
 
     public static MongoConfig getInstance() {
@@ -33,10 +42,6 @@ public class MongoConfig {
                 instance.close();
             }
         }));
-    }
-
-    public MongoDatabase getDatabase() {
-        return database;
     }
 
     public void close() {
