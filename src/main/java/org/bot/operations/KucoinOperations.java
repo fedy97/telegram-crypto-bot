@@ -2,11 +2,18 @@ package org.bot.operations;
 
 import com.kucoin.sdk.KucoinClientBuilder;
 import com.kucoin.sdk.KucoinRestClient;
-import com.kucoin.sdk.rest.response.WithdrawQuotaResponse;
+import com.kucoin.sdk.exception.KucoinApiException;
+import com.kucoin.sdk.rest.request.WithdrawApplyRequest;
+import com.kucoin.sdk.rest.response.ApiCurrencyDetailChainPropertyResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.bot.utils.EnvVars;
+import org.bot.utils.exceptions.CommandExecutionException;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class KucoinOperations implements Operations {
@@ -23,12 +30,22 @@ public class KucoinOperations implements Operations {
     }
 
     @Override
-    public void withdraw() {
+    public void withdraw(String ticker, Double amount, String chain, String address) {
         try {
-            WithdrawQuotaResponse response = kucoinRestClient.withdrawalAPI().getWithdrawQuotas("BTC", null);
-            log.info(response.toString());
-        } catch (IOException ioException) {
-            log.error(ioException.getMessage());
+            WithdrawApplyRequest withdrawApplyRequest = WithdrawApplyRequest.builder()
+                    .address(address)
+                    .amount(BigDecimal.valueOf(amount))
+                    .currency(ticker.toUpperCase())
+                    .chain(chain.toLowerCase())
+                    .build();
+            kucoinRestClient.withdrawalAPI().applyWithdraw(withdrawApplyRequest);
+        } catch (IOException e) {
+            throw new CommandExecutionException(e.getMessage());
+        } catch (KucoinApiException e) {
+            if (e.getCode().equals("900014")) {
+                throw new CommandExecutionException(e.getMessage() + " You input " + chain + ". Valid chain ids are: " + getAvailableChains(ticker));
+            }
+            throw new CommandExecutionException(e.getMessage().replace('.', ' '));
         }
     }
 
@@ -46,5 +63,16 @@ public class KucoinOperations implements Operations {
     @Override
     public String platform() {
         return "kucoin";
+    }
+
+    @Override
+    public List<String> getAvailableChains(String ticker) {
+        try {
+            List<ApiCurrencyDetailChainPropertyResponse> chains = kucoinRestClient.currencyAPI().getCurrencyDetailV2(ticker.toUpperCase(), null).getChains();
+            return chains.stream().map((ApiCurrencyDetailChainPropertyResponse::getChainName)).collect(Collectors.toList());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return new ArrayList<>();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package org.bot.commands.base;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bot.utils.exceptions.CommandExecutionException;
 import org.bot.utils.exceptions.InvalidCommandException;
 import org.bot.visitor.ValidatingCommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -46,7 +47,10 @@ public class CommandHandler {
                 command.execute(update);
             } catch (InvalidCommandException e) {
                 log.warn(e.getMessage());
-                command.sendText(update.getMessage().getChatId(), "Invalid command format. Use " + command.getName() + " " + command.getDescription());
+                command.sendText(update.getMessage().getChatId(), e.getMessage() + ". Use " + command.getName() + " " + command.getDescription());
+            } catch (CommandExecutionException e) {
+                log.warn(e.getMessage());
+                command.sendText(update.getMessage().getChatId(), e.getMessage());
             }
         }
     }
