@@ -29,6 +29,8 @@
             <groupId>com.kucoin</groupId>
             <artifactId>kucoin-java-sdk</artifactId>
             <version>1.0.9</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/kucoin-java-sdk-1.0.9-jar-with-dependencies.jar</systemPath>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
         <dependency>

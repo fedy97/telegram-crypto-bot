@@ -1,18 +1,11 @@
 package org.bot;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bot.models.CoinNotify;
-import org.bot.tasks.NotifyPercentageChangeTask;
-import org.bot.tasks.base.Task;
-import org.bot.tasks.base.TaskHandler;
-import org.bot.utils.exceptions.GlobalExceptionHandler;
 import org.bot.utils.MongoConfig;
+import org.bot.utils.exceptions.GlobalExceptionHandler;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 @Slf4j
 public class Main {

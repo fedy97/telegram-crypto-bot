@@ -32,6 +32,7 @@ public class MyBot extends TelegramLongPollingBot {
         commandHandler.register(new AuthorizedCommandDecorator(new SavePortfolioLinkCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new DeletePortfolioLinkCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new WithdrawCommand()));
+        commandHandler.register(new AuthorizedCommandDecorator(new AvailableChainsCommand()));
 
         CommandProcessor.getInstance().registerPortfolioCommands();
 
