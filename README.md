@@ -14,7 +14,7 @@
 - [x] Dockerized image
 - [x] Deployable on VPS
 - [x] Full CI/CD Flow with Actions
-- [x] Withdraw funds with Kucoin
+- [x] Withdraw funds/check chains with Kucoin
 
 
 ### Design Patterns:
@@ -71,7 +71,8 @@ Here is the list of commands that require authorization, defined by setting the 
 - `/saveportfolio`: it saves a coingecko portfolio, then you can fetch it by executing `/<portfolio name>` (requires `MONGO_DB_URI`)
 - `/deleteportfolio`: it deletes a portfolio (requires `MONGO_DB_URI`)
 - `/prices`: it lists all saved coins' buy prices (requires `MONGO_DB_URI`)
-- `/withdraw`: it withdraw funds from different platforms. Right now only Kucoin is available.
+- `/withdraw`: it withdraw funds from different platforms. Right now only Kucoin is available
+- `/chains`: it checks which chains are available for deposit/withdraw for a specific coin, for a specific platform
 
 #### Example Usage
 
