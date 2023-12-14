@@ -2,6 +2,7 @@ package org.bot.operations;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public interface Operations {
@@ -9,7 +10,6 @@ public interface Operations {
     boolean isUsable();
     void build();
     String platform();
-    default Set<String> getAvailableChains(String ticker) {
-        return new HashSet<>();
-    }
+    Set<String> getAvailableChains(String ticker);
+    Map<String, Double> getBalance();
 }
