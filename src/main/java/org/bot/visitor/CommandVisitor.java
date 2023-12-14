@@ -8,4 +8,5 @@ public interface CommandVisitor {
     void visitSaveCoinNotifyCommand();
     void visitWithdrawCommand();
     void visitAvailableChainsCommand();
+    void visitBalanceCommand();
 }

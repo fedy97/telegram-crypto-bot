@@ -4,16 +4,16 @@ import com.kucoin.sdk.KucoinClientBuilder;
 import com.kucoin.sdk.KucoinRestClient;
 import com.kucoin.sdk.exception.KucoinApiException;
 import com.kucoin.sdk.rest.request.WithdrawApplyRequest;
+import com.kucoin.sdk.rest.response.AccountBalancesResponse;
 import com.kucoin.sdk.rest.response.ApiCurrencyDetailChainPropertyResponseV2;
 import lombok.extern.slf4j.Slf4j;
 import org.bot.utils.EnvVars;
+import org.bot.utils.Helpers;
 import org.bot.utils.exceptions.CommandExecutionException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -73,7 +73,24 @@ public class KucoinOperations implements Operations {
             return chains.stream().map((ApiCurrencyDetailChainPropertyResponseV2::getChainId)).collect(Collectors.toSet());
         } catch (IOException e) {
             log.error(e.getMessage());
-            return new HashSet<>();
+            throw new CommandExecutionException(e.getMessage());
         }
+    }
+
+    @Override
+    public Map<String, Double> getBalance() {
+        Map<String, Double> balance = new HashMap<>();
+        try {
+            List<AccountBalancesResponse> accounts = kucoinRestClient.accountAPI().listAccounts(null, null);
+            accounts.stream()
+                    .filter(account -> account.getBalance().doubleValue() > 0)
+                    .forEach(account -> Helpers.addToMapOrSum(balance, account.getCurrency(), account.getBalance().doubleValue()));
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new CommandExecutionException(e.getMessage());
+        } catch (KucoinApiException e) {
+            throw new CommandExecutionException(e.getMessage().replace('.', ' '));
+        }
+        return balance;
     }
 }

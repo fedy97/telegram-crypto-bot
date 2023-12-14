@@ -14,7 +14,7 @@
 - [x] Dockerized image
 - [x] Deployable on VPS
 - [x] Full CI/CD Flow with Actions
-- [x] Withdraw funds/check chains with Kucoin
+- [x] Withdraw funds/check chains/check balance with Kucoin
 
 
 ### Design Patterns:
@@ -73,6 +73,7 @@ Here is the list of commands that require authorization, defined by setting the 
 - `/prices`: it lists all saved coins' buy prices (requires `MONGO_DB_URI`)
 - `/withdraw`: it withdraw funds from different platforms. Right now only Kucoin is available
 - `/chains`: it checks which chains are available for deposit/withdraw for a specific coin, for a specific platform
+- `/balance`: it checks balance for the specified exchange (platform)
 
 #### Example Usage
 

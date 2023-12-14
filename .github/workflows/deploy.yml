@@ -44,3 +44,4 @@ jobs:
             export KUCOIN_SECRET_KEY="${{ secrets.KUCOIN_SECRET_KEY }}"
             export KUCOIN_PASSPHRASE="${{ secrets.KUCOIN_PASSPHRASE }}"
             docker-compose up --build -d
+            docker images -q -f "dangling=true" | xargs docker rmi
