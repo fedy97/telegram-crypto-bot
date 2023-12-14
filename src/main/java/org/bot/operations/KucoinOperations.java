@@ -4,15 +4,16 @@ import com.kucoin.sdk.KucoinClientBuilder;
 import com.kucoin.sdk.KucoinRestClient;
 import com.kucoin.sdk.exception.KucoinApiException;
 import com.kucoin.sdk.rest.request.WithdrawApplyRequest;
-import com.kucoin.sdk.rest.response.ApiCurrencyDetailChainPropertyResponse;
+import com.kucoin.sdk.rest.response.ApiCurrencyDetailChainPropertyResponseV2;
 import lombok.extern.slf4j.Slf4j;
 import org.bot.utils.EnvVars;
 import org.bot.utils.exceptions.CommandExecutionException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -66,13 +67,13 @@ public class KucoinOperations implements Operations {
     }
 
     @Override
-    public List<String> getAvailableChains(String ticker) {
+    public Set<String> getAvailableChains(String ticker) {
         try {
-            List<ApiCurrencyDetailChainPropertyResponse> chains = kucoinRestClient.currencyAPI().getCurrencyDetailV2(ticker.toUpperCase(), null).getChains();
-            return chains.stream().map((ApiCurrencyDetailChainPropertyResponse::getChainName)).collect(Collectors.toList());
+            List<ApiCurrencyDetailChainPropertyResponseV2> chains = kucoinRestClient.currencyAPI().getCurrencyDetailV3(ticker.toUpperCase(), null).getChains();
+            return chains.stream().map((ApiCurrencyDetailChainPropertyResponseV2::getChainId)).collect(Collectors.toSet());
         } catch (IOException e) {
             log.error(e.getMessage());
-            return new ArrayList<>();
+            return new HashSet<>();
         }
     }
 }

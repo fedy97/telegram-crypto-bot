@@ -1,8 +1,8 @@
 package org.bot;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bot.utils.exceptions.GlobalExceptionHandler;
 import org.bot.utils.MongoConfig;
+import org.bot.utils.exceptions.GlobalExceptionHandler;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;

@@ -77,4 +77,17 @@ public class ValidatingCommandVisitor implements CommandVisitor {
             throw new InvalidCommandException("Available platforms are: " + OperationsDispatcher.getInstance().getAvailablePlatforms());
         }
     }
+
+    @Override
+    public void visitAvailableChainsCommand() {
+        String[] parts = update.getMessage().getText().split(" ");
+        if (parts.length != 3)
+            throw new InvalidCommandException();
+        String platform = parts[1];
+        try {
+            OperationsDispatcher.getInstance().getOperations(platform);
+        } catch (PlatformNotAvailableException e) {
+            throw new InvalidCommandException("Available platforms are: " + OperationsDispatcher.getInstance().getAvailablePlatforms());
+        }
+    }
 }

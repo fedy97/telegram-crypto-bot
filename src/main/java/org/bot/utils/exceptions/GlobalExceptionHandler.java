@@ -8,6 +8,6 @@ public class GlobalExceptionHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
         // log the exception
-        log.error(throwable.getMessage());
+        log.error(throwable.toString());
     }
 }
