@@ -3,6 +3,7 @@ RUN mkdir -p /workspace
 WORKDIR /workspace
 COPY pom.xml /workspace
 COPY src /workspace/src
+RUN mvn initialize
 RUN mvn -B package --file pom.xml -DskipTests
 
 FROM adoptopenjdk/openjdk11:aarch64-ubuntu-jdk-11.0.10_9-slim
