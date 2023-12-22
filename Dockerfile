@@ -2,6 +2,7 @@ FROM arm64v8/maven:3.6.3-openjdk-11-slim AS build
 RUN mkdir -p /workspace
 WORKDIR /workspace
 COPY pom.xml /workspace
+COPY checkstyle.xml /workspace
 COPY src /workspace/src
 RUN mvn initialize
 RUN mvn -B package --file pom.xml -DskipTests
