@@ -7,6 +7,6 @@ public class InvalidCommandException extends RuntimeException{
     }
 
     public InvalidCommandException(String optionalErrorMessage) {
-        super(DEFAULT_INVALID_MESSAGE + ". " + optionalErrorMessage);
+        super(DEFAULT_INVALID_MESSAGE + ": " + optionalErrorMessage);
     }
 }

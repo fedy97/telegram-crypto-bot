@@ -51,6 +51,11 @@ public class KucoinOperations implements Operations {
     }
 
     @Override
+    public void trade(String action, String ticker, String type, Double amount, Double price) {
+        // TODO
+    }
+
+    @Override
     public boolean isUsable() {
         return this.passphrase != null && this.apiKey != null && this.secretKey != null;
     }

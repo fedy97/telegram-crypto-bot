@@ -21,7 +21,7 @@ public class ValidatingCommandVisitor implements CommandVisitor {
             throw new InvalidCommandException();
         String link = parts[2];
         if (!link.contains("coingecko.com") || !link.contains("portfolios/public/"))
-            throw new InvalidCommandException();
+            throw new InvalidCommandException("Coingecko link not valid");
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ValidatingCommandVisitor implements CommandVisitor {
         try {
             Double.parseDouble(parts[2].replace(",", "."));
         } catch (NumberFormatException e) {
-            throw new InvalidCommandException();
+            throw new InvalidCommandException(e.getMessage());
         }
     }
 
@@ -56,7 +56,7 @@ public class ValidatingCommandVisitor implements CommandVisitor {
         try {
             Integer.parseInt(parts[2]);
         } catch (NumberFormatException e) {
-            throw new InvalidCommandException();
+            throw new InvalidCommandException(e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class ValidatingCommandVisitor implements CommandVisitor {
         try {
             Double.parseDouble(parts[3].replace(",", "."));
         } catch (NumberFormatException e) {
-            throw new InvalidCommandException();
+            throw new InvalidCommandException(e.getMessage());
         }
         String platform = parts[1];
         try {
@@ -101,6 +101,31 @@ public class ValidatingCommandVisitor implements CommandVisitor {
             OperationsDispatcher.getInstance().getOperations(platform);
         } catch (PlatformNotAvailableException e) {
             throw new InvalidCommandException("Available platforms are: " + OperationsDispatcher.getInstance().getAvailablePlatforms());
+        }
+    }
+
+    @Override
+    public void visitTradeCommand() {
+        String[] parts = update.getMessage().getText().split(" ");
+        if (parts.length != 6 && parts.length != 7)
+            throw new InvalidCommandException();
+        String platform = parts[1];
+        try {
+            OperationsDispatcher.getInstance().getOperations(platform);
+        } catch (PlatformNotAvailableException e) {
+            throw new InvalidCommandException("Available platforms are: " + OperationsDispatcher.getInstance().getAvailablePlatforms());
+        }
+        String action = parts[2];
+        if (!action.equalsIgnoreCase("buy") && !action.equalsIgnoreCase("sell"))
+            throw new InvalidCommandException("Action available are `sell` or `buy`");
+        String type = parts[4];
+        if (!type.equalsIgnoreCase("market") && !type.equalsIgnoreCase("limit"))
+            throw new InvalidCommandException("Types available are `market` or `limit`");
+        try {
+            Double.parseDouble(parts[5].replace(",", "."));
+            if (parts.length == 7) Double.parseDouble(parts[6].replace(",", "."));
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandException(e.getMessage());
         }
     }
 }
