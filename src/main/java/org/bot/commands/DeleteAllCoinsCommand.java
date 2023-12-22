@@ -7,7 +7,6 @@ import org.bot.observer.Notifier;
 import org.bot.observer.UpdateRequest;
 import org.bot.observer.actions.DeleteAllAction;
 import org.bot.repositories.CoinRepository;
-import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 

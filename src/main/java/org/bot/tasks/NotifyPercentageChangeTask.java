@@ -14,7 +14,6 @@ import org.bot.tasks.base.Task;
 import org.bot.utils.CoingeckoFacade;
 import org.bot.utils.formatters.ToBoldDecorator;
 
-import java.io.IOException;
 import java.util.List;
 
 @Slf4j

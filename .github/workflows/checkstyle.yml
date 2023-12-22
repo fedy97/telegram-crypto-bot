@@ -1,0 +1,36 @@
+name: Checkstyle
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  checkstyle:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Build with Maven and Run Checkstyle
+        run: |
+          mvn clean install
+          mvn initialize
+          mvn checkstyle:check
+
+      - name: Upload Checkstyle results
+        uses: actions/upload-artifact@v2
+        with:
+          name: checkstyle-results
+          path: target/checkstyle-result.xml
