@@ -3,12 +3,7 @@
         "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
-    <property name="severity" value="warning"/>
-    <property name="charset" value="UTF-8"/>
-
-    <!-- Specify the Java version (e.g., 8, 11) -->
     <module name="TreeWalker">
         <module name="UnusedImports"/>
-        <!-- Add other modules or configurations as needed -->
     </module>
 </module>

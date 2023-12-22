@@ -1,7 +1,5 @@
 package org.bot.utils.formatters;
 
-import java.util.Arrays;
-
 public class BalanceDecorator extends StringDecorator {
 
     public BalanceDecorator(String decoratedString) {
