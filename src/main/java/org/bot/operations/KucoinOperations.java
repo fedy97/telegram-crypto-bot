@@ -3,9 +3,11 @@ package org.bot.operations;
 import com.kucoin.sdk.KucoinClientBuilder;
 import com.kucoin.sdk.KucoinRestClient;
 import com.kucoin.sdk.exception.KucoinApiException;
+import com.kucoin.sdk.rest.request.OrderCreateApiRequest;
 import com.kucoin.sdk.rest.request.WithdrawApplyRequest;
 import com.kucoin.sdk.rest.response.AccountBalancesResponse;
 import com.kucoin.sdk.rest.response.ApiCurrencyDetailChainPropertyResponseV2;
+import com.kucoin.sdk.rest.response.OrderCreateResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.bot.utils.EnvVars;
 import org.bot.utils.Helpers;
@@ -92,5 +94,25 @@ public class KucoinOperations implements Operations {
             throw new CommandExecutionException(e.getMessage().replace('.', ' '));
         }
         return balance;
+    }
+
+    @Override
+    public String trade(String action, String ticker, String type, Double amount, Double price) {
+        try {
+        OrderCreateApiRequest request = OrderCreateApiRequest.builder()
+                .side(action)
+                .type(type)
+                .price(price != null ? BigDecimal.valueOf(price) : null)
+                .size(action.equals("buy") ? null : BigDecimal.valueOf(amount))
+                .funds(action.equals("buy") ? BigDecimal.valueOf(amount) : null)
+                .symbol(ticker + "-USDT")
+                .clientOid(UUID.randomUUID().toString())
+                .build();
+
+        OrderCreateResponse response = kucoinRestClient.orderAPI().createOrder(request);
+        return response.getOrderId();
+        } catch (IOException | KucoinApiException e) {
+            throw new CommandExecutionException(e.getMessage());
+        }
     }
 }

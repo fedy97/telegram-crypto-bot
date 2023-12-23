@@ -9,4 +9,5 @@ public interface CommandVisitor {
     void visitWithdrawCommand();
     void visitAvailableChainsCommand();
     void visitBalanceCommand();
+    void visitTradeCommand();
 }
