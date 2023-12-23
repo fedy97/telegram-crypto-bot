@@ -3,7 +3,6 @@ package org.bot.operations;
 import org.bot.utils.exceptions.NotImplementedException;
 
 import java.util.Map;
-import java.util.Set;
 
 public interface Operations {
 
@@ -49,9 +48,9 @@ public interface Operations {
 
     /**
      * @param ticker to fetch chains
-     * @return a set of chains as ids (ex. bep20, erc20)
+     * @return a map of chains as keys (ex. bep20, erc20) and withdrawal fee as value
      */
-    default Set<String> getAvailableChains(String ticker) {
+    default Map<String, Double> getAvailableChains(String ticker) {
         throw new NotImplementedException();
     }
 
