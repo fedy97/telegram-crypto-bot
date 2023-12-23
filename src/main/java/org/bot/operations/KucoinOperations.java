@@ -8,6 +8,7 @@ import com.kucoin.sdk.rest.request.WithdrawApplyRequest;
 import com.kucoin.sdk.rest.response.AccountBalancesResponse;
 import com.kucoin.sdk.rest.response.ApiCurrencyDetailChainPropertyResponseV2;
 import com.kucoin.sdk.rest.response.OrderCreateResponse;
+import com.kucoin.sdk.rest.response.WithdrawQuotaResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.bot.utils.EnvVars;
 import org.bot.utils.Helpers;
@@ -15,8 +16,12 @@ import org.bot.utils.exceptions.CommandExecutionException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 public class KucoinOperations implements Operations {
@@ -46,7 +51,7 @@ public class KucoinOperations implements Operations {
             throw new CommandExecutionException(e.getMessage());
         } catch (KucoinApiException e) {
             if (e.getCode().equals("900014")) {
-                throw new CommandExecutionException(e.getMessage() + " You input " + chain + ". Valid chain ids are: " + getAvailableChains(ticker));
+                throw new CommandExecutionException(e.getMessage() + " You input " + chain + ". Valid chain ids are: " + getAvailableChains(ticker).keySet());
             }
             throw new CommandExecutionException(e.getMessage().replace('.', ' '));
         }
@@ -69,14 +74,26 @@ public class KucoinOperations implements Operations {
     }
 
     @Override
-    public Set<String> getAvailableChains(String ticker) {
+    public Map<String, Double> getAvailableChains(String ticker) {
+        List<ApiCurrencyDetailChainPropertyResponseV2> chains;
         try {
-            List<ApiCurrencyDetailChainPropertyResponseV2> chains = kucoinRestClient.currencyAPI().getCurrencyDetailV3(ticker.toUpperCase(), null).getChains();
-            return chains.stream().map((ApiCurrencyDetailChainPropertyResponseV2::getChainId)).collect(Collectors.toSet());
-        } catch (IOException e) {
+            chains = kucoinRestClient.currencyAPI().getCurrencyDetailV3(ticker.toUpperCase(), null).getChains();
+        } catch (IOException | KucoinApiException e) {
             log.error(e.getMessage());
             throw new CommandExecutionException(e.getMessage());
         }
+        List<WithdrawQuotaResponse> responses = chains.stream().map(chain -> {
+            try {
+                return kucoinRestClient.withdrawalAPI().getWithdrawQuotas(ticker.toUpperCase(), chain.getChainId());
+            } catch (IOException | KucoinApiException e) {
+                log.error(e.getMessage());
+                throw new CommandExecutionException(e.getMessage());
+            }
+        }).collect(Collectors.toList());
+        Map<String, Double> map = new HashMap<>();
+        IntStream.range(0, chains.size())
+                .forEach(i -> map.put(chains.get(i).getChainId(), responses.get(i).getWithdrawMinFee().doubleValue()));
+        return map;
     }
 
     @Override
@@ -99,18 +116,18 @@ public class KucoinOperations implements Operations {
     @Override
     public String trade(String action, String ticker, String type, Double amount, Double price) {
         try {
-        OrderCreateApiRequest request = OrderCreateApiRequest.builder()
-                .side(action)
-                .type(type)
-                .price(price != null ? BigDecimal.valueOf(price) : null)
-                .size(action.equals("buy") ? null : BigDecimal.valueOf(amount))
-                .funds(action.equals("buy") ? BigDecimal.valueOf(amount) : null)
-                .symbol(ticker + "-USDT")
-                .clientOid(UUID.randomUUID().toString())
-                .build();
+            OrderCreateApiRequest request = OrderCreateApiRequest.builder()
+                    .side(action)
+                    .type(type)
+                    .price(price != null ? BigDecimal.valueOf(price) : null)
+                    .size(action.equals("buy") ? null : BigDecimal.valueOf(amount))
+                    .funds(action.equals("buy") ? BigDecimal.valueOf(amount) : null)
+                    .symbol(ticker + "-USDT")
+                    .clientOid(UUID.randomUUID().toString())
+                    .build();
 
-        OrderCreateResponse response = kucoinRestClient.orderAPI().createOrder(request);
-        return response.getOrderId();
+            OrderCreateResponse response = kucoinRestClient.orderAPI().createOrder(request);
+            return response.getOrderId();
         } catch (IOException | KucoinApiException e) {
             throw new CommandExecutionException(e.getMessage());
         }
