@@ -1,21 +1,38 @@
 package org.bot.operations;
 
+import org.bot.utils.exceptions.NotImplementedException;
+
 import java.util.Map;
 import java.util.Set;
 
 public interface Operations {
 
     /**
-     * @param ticker to withdraw
-     * @param amount to withdraw, ex. 1 means 1 <ticker>
-     * @param chain id for the specified ticker, ex. bep20
+     * @param ticker  to withdraw
+     * @param amount  to withdraw, ex. 1 means 1 <ticker>
+     * @param chain   id for the specified ticker, ex. bep20
      * @param address to receive funds
      */
-    void withdraw(String ticker, Double amount, String chain, String address);
-    void trade(String action, String ticker, String type, Double amount, Double price);
+    default void withdraw(String ticker, Double amount, String chain, String address) {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * trade a coin
+     * @param action buy/sell
+     * @param ticker to buy/sell
+     * @param type market/limit
+     * @param amount of the coin to buy/sell
+     * @param price optional, for limit orders
+     * @return order id
+     */
+    default String trade(String action, String ticker, String type, Double amount, Double price) {
+        throw new NotImplementedException();
+    }
 
     /**
      * this checks if all the required values are present before building the operations object
+     *
      * @return true if all required values are provided.
      */
     boolean isUsable();
@@ -34,10 +51,14 @@ public interface Operations {
      * @param ticker to fetch chains
      * @return a set of chains as ids (ex. bep20, erc20)
      */
-    Set<String> getAvailableChains(String ticker);
+    default Set<String> getAvailableChains(String ticker) {
+        throw new NotImplementedException();
+    }
 
     /**
      * @return a map with key the ticker (ex. BTC) and value the quantity
      */
-    Map<String, Double> getBalance();
+    default Map<String, Double> getBalance() {
+        throw new NotImplementedException();
+    }
 }

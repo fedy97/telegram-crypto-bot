@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bot.commands.base.Command;
 import org.bot.operations.Operations;
 import org.bot.operations.OperationsDispatcher;
+import org.bot.utils.formatters.ToCodeDecorator;
 import org.bot.visitor.CommandVisitor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -20,16 +21,16 @@ public class TradeCommand implements Command {
     public void execute(Update update) throws TelegramApiException {
         String[] parts = update.getMessage().getText().split(" ");
         String platform = parts[1].toLowerCase().trim();
-        String action = parts[2].toUpperCase().trim();
+        String action = parts[2].toLowerCase().trim();
         String ticker = parts[3].toUpperCase().trim();
-        String type = parts[4].toUpperCase().trim();
+        String type = parts[4].toLowerCase().trim();
         Double amount = Double.parseDouble(parts[5].replace(",", ".").trim());
         Double price = parts.length == 7 ? Double.parseDouble(parts[6].replace(",", ".").trim()) : null;
 
         Operations operations = OperationsDispatcher.getInstance().getOperations(platform);
-        operations.trade(action, ticker, type, amount, price);
+        String orderId = operations.trade(action, ticker, type, amount, price);
 
-        sendText(update.getMessage().getChatId(), "Trade placed");
+        sendText(update.getMessage().getChatId(), "Trade placed, order id: " + new ToCodeDecorator(orderId));
     }
 
     @Override
