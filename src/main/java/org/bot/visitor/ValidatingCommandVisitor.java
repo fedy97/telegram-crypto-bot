@@ -45,7 +45,9 @@ public class ValidatingCommandVisitor implements CommandVisitor {
 
     @Override
     public void visitDeletePortfolioLinkCommand() {
-        visitDeleteCoinCommand();
+        String[] parts = update.getMessage().getText().split(" ");
+        if (parts.length != 2)
+            throw new InvalidCommandException();
     }
 
     @Override
