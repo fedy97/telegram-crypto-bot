@@ -11,8 +11,7 @@ import org.bot.models.Trending;
 import org.bot.models.factory.CoinFactory;
 import org.bot.utils.exceptions.CoingeckoException;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 public class CoingeckoFacade {
@@ -40,16 +39,20 @@ public class CoingeckoFacade {
                     .get()
                     .build();
             response = client.newCall(request).execute();
-            if (!response.isSuccessful())
+            if (!response.isSuccessful()) {
+                log.error(response.message());
                 throw new CoingeckoException();
+            }
+            assert response.body() != null;
             String responseBody = response.body().string();
             String[] coinsRaw = responseBody.split("<img loading=\"lazy\" alt=\"");
             for (int i = 1; i < coinsRaw.length - 2; i = i + 2) {
                 Coin coin = CoinFactory.fromRawCoin(coinsRaw[i]);
-                coins.put(coin.getTicker().toUpperCase(), coin);
+                if (coin.getTicker() != null) coins.put(coin.getTicker().toUpperCase(), coin);
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(Arrays.toString(e.getStackTrace()));
+            log.error(e.toString());
             throw new CoingeckoException();
         } finally {
             if (response != null) {
@@ -72,6 +75,7 @@ public class CoingeckoFacade {
             response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 ResponseBody responseBody = response.body();
+                assert responseBody != null;
                 String responseBodyString = responseBody.string();
                 return new Trending(responseBodyString);
             }

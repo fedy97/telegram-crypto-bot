@@ -13,7 +13,7 @@ public class CoinFactory {
     public static Coin fromRawCoin(String raw) {
         Coin coin = new Coin();
         try {
-            coin.setCoinName(raw.split(" ")[0]);
+            coin.setCoinName(raw.split(" \\(")[0]);
             coin.setTicker(raw.split("\\(")[1].split("\\)")[0]);
             coin.setLink("https://www.coingecko.com" + raw.split("\"width: 115px;\" href=\"")[1].split("\"")[0]);
             coin.setPrice(Double.parseDouble(raw.split("<td data-sort=\"")[1].split("\"")[0]));
