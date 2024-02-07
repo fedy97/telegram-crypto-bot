@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import org.apache.http.client.HttpResponseException;
 import org.bot.models.Coin;
 import org.bot.models.Portfolio;
 import org.bot.models.Trending;
@@ -36,13 +37,12 @@ public class CoingeckoFacade {
         try {
             Request request = new Request.Builder()
                     .url(url)
+                    .header("Sec-Fetch-Site", "cross-site")
                     .get()
                     .build();
             response = client.newCall(request).execute();
-            if (!response.isSuccessful()) {
-                log.error(response.message());
-                throw new CoingeckoException();
-            }
+            if (!response.isSuccessful())
+                throw new HttpResponseException(response.code(), response.toString());
             assert response.body() != null;
             String responseBody = response.body().string();
             String[] coinsRaw = responseBody.split("<img loading=\"lazy\" alt=\"");
