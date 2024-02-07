@@ -35,11 +35,7 @@ public class CoingeckoFacade {
         Response response = null;
         OkHttpClient client = new OkHttpClient();
         try {
-            Request request = new Request.Builder()
-                    .url(url)
-                    .header("Sec-Fetch-Site", "cross-site")
-                    .get()
-                    .build();
+            Request request = Helpers.buildRequestCoingecko(url);
             response = client.newCall(request).execute();
             if (!response.isSuccessful())
                 throw new HttpResponseException(response.code(), response.toString());
