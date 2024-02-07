@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.bot.commands.*;
 import org.bot.commands.base.AuthorizedCommandDecorator;
 import org.bot.commands.base.CommandHandler;
-import org.bot.commands.base.CommandProcessor;
 import org.bot.operations.KucoinOperations;
 import org.bot.operations.OperationsDispatcher;
 import org.bot.utils.EnvVars;
@@ -36,7 +35,7 @@ public class MyBot extends TelegramLongPollingBot {
         commandHandler.register(new AuthorizedCommandDecorator(new BalanceCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new TradeCommand()));
 
-        CommandProcessor.getInstance().registerPortfolioCommands();
+        // CommandProcessor.getInstance().registerPortfolioCommands();
 
         OperationsDispatcher.getInstance().register(new KucoinOperations());
     }
