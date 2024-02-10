@@ -11,7 +11,7 @@ import org.bot.observer.actions.DeleteAction;
 import org.bot.repositories.CoinNotifyRepository;
 import org.bot.repositories.PortfolioLinkRepository;
 import org.bot.tasks.base.Task;
-import org.bot.utils.CoingeckoFacade;
+import org.bot.providers.CoingeckoProvider;
 import org.bot.utils.formatters.ToBoldDecorator;
 
 import java.util.List;
@@ -31,9 +31,9 @@ public class NotifyPercentageChangeTask extends Task<CoinNotify> {
         if (coinsToCheck.isEmpty())
             return;
         List<PortfolioLink> portfolios = CacheFlyWeight.getInstance(PortfolioLink.class, PortfolioLinkRepository.getInstance()).findAll();
-        Portfolio portfolio = null;
+        Portfolio portfolio;
         try {
-            portfolio = CoingeckoFacade.getInstance().getCoingeckoPortfolio(portfolios.get(0).getLink());
+            portfolio = CoingeckoProvider.getInstance().getPortfolio(portfolios.get(0).getLink());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -56,7 +56,7 @@ public class NotifyPercentageChangeTask extends Task<CoinNotify> {
                 }
                 i++;
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
