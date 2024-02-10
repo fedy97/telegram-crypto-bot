@@ -20,7 +20,7 @@ public class ValidatingCommandVisitor implements CommandVisitor {
         if (parts.length != 3)
             throw new InvalidCommandException();
         String link = parts[2];
-        if (!link.contains("coingecko.com") && !link.contains("coinmarketcap.com/watchlist"))
+        if (!link.contains("coinmarketcap.com/watchlist"))
             throw new InvalidCommandException("Portfolio link not valid");
     }
 
