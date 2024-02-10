@@ -8,7 +8,7 @@ import org.apache.http.client.HttpResponseException;
 import org.bot.models.Coin;
 import org.bot.models.Portfolio;
 import org.bot.models.Trending;
-import org.bot.utils.exceptions.CoingeckoException;
+import org.bot.utils.exceptions.CoinMarketCapException;
 import org.bot.utils.exceptions.NotImplementedException;
 
 import java.util.Arrays;
@@ -50,7 +50,7 @@ public class CoinMarketCapProvider implements DataProvider {
         } catch (Exception e) {
             log.error(Arrays.toString(e.getStackTrace()));
             log.error(e.toString());
-            throw new CoingeckoException();
+            throw new CoinMarketCapException();
         } finally {
             if (response != null) {
                 response.close();
