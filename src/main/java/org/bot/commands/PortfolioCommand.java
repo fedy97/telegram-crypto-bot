@@ -5,7 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.bot.commands.base.Command;
 import org.bot.models.Portfolio;
 import org.bot.models.PortfolioLink;
-import org.bot.utils.CoingeckoFacade;
+import org.bot.providers.CoinMarketCapProvider;
+import org.bot.providers.DataProvider;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -40,8 +41,8 @@ public class PortfolioCommand implements Command {
 
     private String buildPortfolioResponse() {
         try {
-            CoingeckoFacade coingeckoFacade = CoingeckoFacade.getInstance();
-            Portfolio portfolio = coingeckoFacade.getCoingeckoPortfolio(getPortfolioLink().getLink());
+            DataProvider provider = CoinMarketCapProvider.getInstance();
+            Portfolio portfolio = provider.getPortfolio(getPortfolioLink().getLink());
             portfolio.sort();
             return portfolio.toString();
         } catch (Exception e) {

@@ -1,11 +1,16 @@
 package org.bot.commands;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bot.commands.base.Command;
 import org.bot.models.Trending;
-import org.bot.utils.CoingeckoFacade;
+import org.bot.providers.CoingeckoProvider;
+import org.bot.providers.DataProvider;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Arrays;
+
+@Slf4j
 public class TrendingCommand implements Command {
 
     public TrendingCommand() {
@@ -26,12 +31,17 @@ public class TrendingCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "show trending coins on Coingecko";
+        return "show trending coins";
     }
 
     private String buildTrendingResponse() {
-        CoingeckoFacade coingeckoFacade = CoingeckoFacade.getInstance();
-        Trending trending = coingeckoFacade.getTrendingCoins();
-        return trending.toString();
+        try {
+            DataProvider provider = CoingeckoProvider.getInstance();
+            Trending trending = provider.getTrendingCoins();
+            return trending.toString();
+        } catch (Exception e) {
+            log.error(Arrays.toString(e.getStackTrace()));
+            return e.getMessage();
+        }
     }
 }
