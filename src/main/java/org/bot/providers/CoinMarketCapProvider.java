@@ -1,5 +1,7 @@
 package org.bot.providers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -18,9 +20,11 @@ import java.util.Map;
 @Slf4j
 public class CoinMarketCapProvider implements DataProvider {
     private static CoinMarketCapProvider instance;
+    private final ObjectMapper objectMapper;
 
     private CoinMarketCapProvider() {
         // Private constructor to prevent instantiation
+        this.objectMapper = new ObjectMapper();
     }
 
     public static CoinMarketCapProvider getInstance() {
@@ -36,15 +40,23 @@ public class CoinMarketCapProvider implements DataProvider {
         Response response = null;
         OkHttpClient client = new OkHttpClient();
         try {
-            Request request = this.buildGetRequest(url);
+            String requestUrl = "https://api.coinmarketcap.com/asset/v3/watchlist/query";
+            String requestBody = "{\n" +
+                    "    \"watchListType\": \"FOLLOWED\",\n" +
+                    "    \"aux\": 1,\n" +
+                    "    \"watchListId\": \"" + url.split("watchlist/")[1].replace("/", "") + "\",\n" +
+                    "    \"cryptoAux\": \"ath,atl,high24h,low24h,max_supply,self_reported_circulating_supply,self_reported_market_cap,circulating_supply,total_supply,volume_7d,volume_30d,tvl,audit,cmc_rank\",\n" +
+                    "    \"convertIds\": \"2781\"\n" +
+                    "}";
+            Request request = this.buildPostRequest(requestUrl, requestBody);
             response = client.newCall(request).execute();
             if (!response.isSuccessful())
                 throw new HttpResponseException(response.code(), response.toString());
             assert response.body() != null;
-            String responseBody = response.body().string();
-            String[] coinsRaw = responseBody.split("class=\"sc-4984dd93-0 kKpPOn\">");
-            for (int i = 1; i < coinsRaw.length; i = i + 1) {
-                Coin coin = this.fromRawCoin(coinsRaw[i]);
+            JsonNode jsonNode = this.objectMapper.readTree(response.body().string());
+            JsonNode cryptoCurrencies = jsonNode.at("/data/watchLists/0/cryptoCurrencies");
+            for (JsonNode coinNode : cryptoCurrencies) {
+                Coin coin = this.fromRawCoin(coinNode);
                 if (coin.getTicker() != null) coins.put(coin.getTicker().toUpperCase(), coin);
             }
         } catch (Exception e) {
@@ -65,32 +77,17 @@ public class CoinMarketCapProvider implements DataProvider {
     }
 
     @Override
-    public Coin fromRawCoin(String raw) {
+    public Coin fromRawCoin(JsonNode raw) {
         Coin coin = new Coin();
         try {
-            coin.setCoinName(raw.split("<")[0]);
+            coin.setCoinName(raw.at("/name").asText());
+            coin.setTicker(raw.at("/symbol").asText());
+            coin.setLink("https://coinmarketcap.com/currencies/" + raw.at("/slug").asText());
+            coin.setPrice(raw.at("/quotes/0/price").asDouble());
+            double percentChange24h = raw.at("/quotes/0/percentChange24h").asDouble();
+            coin.setChange24(Double.parseDouble(String.format("%.2f", percentChange24h)) + "%");
         } catch (Exception e) {
-            log.warn("name for token ignored: " + e);
-        }
-        try {
-            coin.setTicker(raw.split("click=\"true\">")[1].split("<")[0]);
-        } catch (Exception e) {
-            log.warn("ticker for token ignored: " + e);
-        }
-        try {
-            coin.setLink("https://coinmarketcap.com" + raw.split("<a href=\"")[1].split("\"")[0]);
-        } catch (Exception e) {
-            log.warn("link for token ignored: " + e);
-        }
-        try {
-            coin.setPrice(Double.parseDouble(raw.split("\"cmc-link\"><span>\\$")[1].split("<")[0].replace(",", "")));
-        } catch (Exception e) {
-            log.warn("price for token ignored: " + e);
-        }
-        try {
-            coin.setChange24(raw.split("display:inline-block\"></span>")[2].split("<")[0]);
-        } catch (Exception e) {
-            log.warn("change24 for token ignored: " + e);
+            log.warn("token ignored: " + e);
         }
         return coin;
     }
