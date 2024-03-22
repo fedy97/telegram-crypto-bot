@@ -6,6 +6,7 @@ public interface CommandVisitor {
     void visitDeleteCoinCommand();
     void visitDeletePortfolioLinkCommand();
     void visitSaveCoinNotifyCommand();
+    void visitDepositCommand();
     void visitWithdrawCommand();
     void visitAvailableChainsCommand();
     void visitBalanceCommand();

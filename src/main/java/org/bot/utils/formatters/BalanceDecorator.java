@@ -13,7 +13,7 @@ public class BalanceDecorator extends StringDecorator {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < coins.length; i++) {
             String coin = coins[i].trim();
-            sb.append(coin.replace("=", ": "));
+            sb.append(new ToBoldDecorator(coin.replace("=", ": ")));
             if (i < coins.length - 1)
                 sb.append("\n");
         }

@@ -17,6 +17,13 @@ public interface Operations {
     }
 
     /**
+     * @param ticker  to withdraw
+     */
+    default Map<String, String> deposit(String ticker, String chain) {
+        throw new NotImplementedException();
+    }
+
+    /**
      * trade a coin
      * @param action buy/sell
      * @param ticker to buy/sell

@@ -24,6 +24,8 @@ public class MyBot extends TelegramLongPollingBot {
         commandHandler.register(new StartCommand());
         commandHandler.register(new HelpCommand());
         commandHandler.register(new TrendingCommand());
+        commandHandler.register(new DepositCommand());
+        commandHandler.register(new AvailableChainsCommand());
         // from here on you need to be admin
         // commandHandler.register(new AuthorizedCommandDecorator(new SaveCoinNotifyCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new PricesCommand()));
@@ -32,7 +34,6 @@ public class MyBot extends TelegramLongPollingBot {
         commandHandler.register(new AuthorizedCommandDecorator(new SavePortfolioLinkCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new DeletePortfolioLinkCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new WithdrawCommand()));
-        commandHandler.register(new AuthorizedCommandDecorator(new AvailableChainsCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new BalanceCommand()));
         commandHandler.register(new AuthorizedCommandDecorator(new TradeCommand()));
 

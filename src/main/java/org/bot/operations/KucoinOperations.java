@@ -5,10 +5,7 @@ import com.kucoin.sdk.KucoinRestClient;
 import com.kucoin.sdk.exception.KucoinApiException;
 import com.kucoin.sdk.rest.request.OrderCreateApiRequest;
 import com.kucoin.sdk.rest.request.WithdrawApplyRequest;
-import com.kucoin.sdk.rest.response.AccountBalancesResponse;
-import com.kucoin.sdk.rest.response.ApiCurrencyDetailChainPropertyResponseV2;
-import com.kucoin.sdk.rest.response.OrderCreateResponse;
-import com.kucoin.sdk.rest.response.WithdrawQuotaResponse;
+import com.kucoin.sdk.rest.response.*;
 import lombok.extern.slf4j.Slf4j;
 import org.bot.utils.EnvVars;
 import org.bot.utils.Helpers;
@@ -55,6 +52,33 @@ public class KucoinOperations implements Operations {
             }
             throw new CommandExecutionException(e.getMessage().replace('.', ' '));
         }
+    }
+
+    @Override
+    public Map<String, String> deposit(String ticker, String chain) {
+        try {
+            if (chain != null) {
+                try {
+                    kucoinRestClient.depositAPI().createDepositAddress(ticker, chain);
+                } catch (KucoinApiException ke) {
+                    // continue if address already exist
+                }
+            }
+            List<DepositAddressResponse> addressResponses = kucoinRestClient.depositAPI().getDepositAddresses(ticker.toUpperCase());
+            return addressResponses.stream()
+                    .collect(Collectors.toMap(DepositAddressResponse::getChain, DepositAddressResponse::getAddress));
+        } catch (KucoinApiException ke) {
+            if (ke.getCode().equals("900014")) {
+                throw new CommandExecutionException(ke.getMessage() + " You input " + chain + ". Valid chain ids are: " + getAvailableChains(ticker).keySet());
+            }
+            throw new CommandExecutionException(ke.getMessage());
+        } catch (Exception e) {
+            throw new CommandExecutionException(e.getMessage());
+        }
+    }
+
+    private void createDepositAddress(String ticker, String chain) {
+
     }
 
     @Override
