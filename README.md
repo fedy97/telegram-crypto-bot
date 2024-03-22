@@ -14,7 +14,7 @@
 - [x] Dockerized image
 - [x] Deployable on VPS
 - [x] Full CI/CD Flow with Actions
-- [x] Withdraw funds/check chains/check balance/trade with Kucoin
+- [x] Withdraw funds/check chains/check balance/trade/deposit with Kucoin
 
 
 ### Design Patterns:
@@ -62,6 +62,8 @@ Here is the list of commands that do not require authorization, so every user ca
 - `/help`: lists of all available commands
 - `/trend`: shows Coingecko trending coins
 - `/<name of the saved portfolio>`: shows the list of the coins saved in the coingecko portfolio
+- `/chains`: it checks which chains are available for deposit/withdraw for a specific coin, for a specific platform
+- `/deposit`: it gives the deposit addresses, based on the platform specified and ticker
 
 #### Authorized Commands
 Here is the list of commands that require authorization, defined by setting the `TG_ADMIN` environmental variable:
@@ -72,7 +74,6 @@ Here is the list of commands that require authorization, defined by setting the 
 - `/deleteportfolio`: it deletes a portfolio (requires `MONGO_DB_URI`)
 - `/prices`: it lists all saved coins' buy prices (requires `MONGO_DB_URI`)
 - `/withdraw`: it withdraw funds from different platforms. Right now only Kucoin is available
-- `/chains`: it checks which chains are available for deposit/withdraw for a specific coin, for a specific platform
 - `/balance`: it checks balance for the specified exchange (platform)
 - `/trade`: it performs a buy/sell action, by specifying the type (limit/market), ticker, amount and optionally the limit price
 
