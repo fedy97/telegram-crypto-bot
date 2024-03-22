@@ -59,7 +59,7 @@ public class KucoinOperations implements Operations {
         try {
             if (chain != null) {
                 try {
-                    kucoinRestClient.depositAPI().createDepositAddress(ticker, chain);
+                    kucoinRestClient.depositAPI().createDepositAddress(ticker.toUpperCase(), chain.toUpperCase());
                 } catch (KucoinApiException ke) {
                     // continue if address already exist
                 }
