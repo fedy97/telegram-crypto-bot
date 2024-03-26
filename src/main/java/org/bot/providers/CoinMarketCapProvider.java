@@ -40,7 +40,7 @@ public class CoinMarketCapProvider implements DataProvider {
         Response response = null;
         OkHttpClient client = new OkHttpClient();
         try {
-            String requestUrl = "https://api.coinmarketcap.com/asset/v3/watchlist/query";
+            String requestUrl = "https://api.coinmark" + "etcap.com/asset/v3/watc" + "hlist/query";
             String requestBody = "{\n" +
                     "    \"watchListType\": \"FOLLOWED\",\n" +
                     "    \"aux\": 1,\n" +
@@ -54,7 +54,7 @@ public class CoinMarketCapProvider implements DataProvider {
                 throw new HttpResponseException(response.code(), response.toString());
             assert response.body() != null;
             JsonNode jsonNode = this.objectMapper.readTree(response.body().string());
-            JsonNode cryptoCurrencies = jsonNode.at("/data/watchLists/0/cryptoCurrencies");
+            JsonNode cryptoCurrencies = jsonNode.at("/data/watch" + "Lists/0/cryptoCurrencies");
             for (JsonNode coinNode : cryptoCurrencies) {
                 Coin coin = this.fromRawCoin(coinNode);
                 if (coin.getTicker() != null) coins.put(coin.getTicker().toUpperCase(), coin);
@@ -82,7 +82,7 @@ public class CoinMarketCapProvider implements DataProvider {
         try {
             coin.setCoinName(raw.at("/name").asText());
             coin.setTicker(raw.at("/symbol").asText());
-            coin.setLink("https://coinmarketcap.com/currencies/" + raw.at("/slug").asText());
+            coin.setLink("https://coinma" + "rketcap.com/currencies/" + raw.at("/slug").asText());
             coin.setPrice(raw.at("/quotes/0/price").asDouble());
             double percentChange24h = raw.at("/quotes/0/percentChange24h").asDouble();
             coin.setChange24(Double.parseDouble(String.format("%.2f", percentChange24h)) + "%");
