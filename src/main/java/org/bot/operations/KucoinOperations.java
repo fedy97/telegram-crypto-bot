@@ -23,15 +23,15 @@ import java.util.stream.IntStream;
 @Slf4j
 public class KucoinOperations implements Operations {
 
-    private final String apiKey = EnvVars.getEnvVar("KUCOIN_API_KEY");
-    private final String passphrase = EnvVars.getEnvVar("KUCOIN_PASSPHRASE");
-    private final String secretKey = EnvVars.getEnvVar("KUCOIN_SECRET_KEY");
+    private final String apiKey = EnvVars.getEnvVar("KUCOIN_API_KEY", null);
+    private final String passphrase = EnvVars.getEnvVar("KUCOIN_PASSPHRASE", null);
+    private final String secretKey = EnvVars.getEnvVar("KUCOIN_SECRET_KEY", null);
     private KucoinRestClient kucoinRestClient;
     private final String baseUrl;
 
     public KucoinOperations() {
         // get from envs the api keys
-        this.baseUrl = Boolean.parseBoolean(EnvVars.getEnvVar("TEST")) ? "https://openapi-sandbox.kucoin.com" : "https://openapi-v2.kucoin.com";
+        this.baseUrl = Boolean.parseBoolean(EnvVars.getEnvVar("TEST", "false")) ? "https://openapi-sandbox.kucoin.com" : "https://openapi-v2.kucoin.com";
     }
 
     @Override
@@ -58,11 +58,7 @@ public class KucoinOperations implements Operations {
     public Map<String, String> deposit(String ticker, String chain) {
         try {
             if (chain != null) {
-                try {
-                    kucoinRestClient.depositAPI().createDepositAddress(ticker.toUpperCase(), chain.toUpperCase());
-                } catch (KucoinApiException ke) {
-                    // continue if address already exist
-                }
+                createDepositAddress(ticker, chain);
             }
             List<DepositAddressResponse> addressResponses = kucoinRestClient.depositAPI().getDepositAddresses(ticker.toUpperCase());
             return addressResponses.stream()
@@ -78,7 +74,12 @@ public class KucoinOperations implements Operations {
     }
 
     private void createDepositAddress(String ticker, String chain) {
-
+        try {
+            kucoinRestClient.depositAPI().createDepositAddress(ticker.toUpperCase(), chain.toUpperCase());
+        } catch (KucoinApiException | IOException e) {
+            // continue if address already exist
+            log.warn(e.getMessage());
+        }
     }
 
     @Override

@@ -37,8 +37,7 @@ public class CoinRepository implements Repository<Coin>, Observer<Coin> {
 
     @Override
     public String getCollectionName() {
-        String collectionName = EnvVars.getEnvVar("COINS_COLLECTION");
-        return collectionName != null && !collectionName.isEmpty() ? collectionName : COLLECTION_NAME;
+        return EnvVars.getEnvVar("COINS_COLLECTION", COLLECTION_NAME);
     }
 
     @Override

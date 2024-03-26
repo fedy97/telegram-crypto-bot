@@ -38,8 +38,7 @@ public class CoinNotifyRepository implements Repository<CoinNotify>, Observer<Co
 
     @Override
     public String getCollectionName() {
-        String collectionName = EnvVars.getEnvVar("COIN_NOTIFIERS_COLLECTION");
-        return collectionName != null && collectionName.length() > 0 ? collectionName : COLLECTION_NAME;
+        return EnvVars.getEnvVar("COIN_NOTIFIERS_COLLECTION", COLLECTION_NAME);
     }
 
     @Override

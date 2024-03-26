@@ -3,9 +3,13 @@ package org.bot.models;
 import lombok.Getter;
 import org.bot.cache.CacheFlyWeight;
 import org.bot.repositories.CoinRepository;
+import org.bot.utils.EnvVars;
 import org.bot.utils.NumberOperations;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Portfolio {
@@ -14,6 +18,7 @@ public class Portfolio {
     private final Map<String, Coin> coins;
     private final Map<String, Double> buyPrices;
     private final StringBuilder sb;
+    private final double threshold = Double.parseDouble(EnvVars.getEnvVar("THRESHOLD_MULTIPLIER", "0.5"));
 
     public Portfolio(Map<String, Coin> coins) {
         this.coins = coins;
@@ -43,7 +48,8 @@ public class Portfolio {
         if (sb.length() > 0)
             sb.setLength(0);
         for (Coin coin : coins.values()) {
-            sb.append(coin.toString());
+            if (!coin.getMultiplier().isEmpty() && Double.parseDouble(coin.getMultiplier().replace("x", "")) > threshold)
+                sb.append(coin);
         }
         return sb.toString();
     }

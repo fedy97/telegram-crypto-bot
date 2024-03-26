@@ -35,7 +35,7 @@ public class AuthorizedCommandDecorator extends CommandDecorator {
 
     private boolean isAuthorized(Update update) {
         String username = update.getMessage().getFrom().getUserName();
-        return username != null && username.equals(EnvVars.getEnvVar("TG_ADMIN"));
+        return username != null && username.equals(EnvVars.getEnvVar("TG_ADMIN", null));
     }
 
 }

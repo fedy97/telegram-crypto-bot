@@ -13,7 +13,7 @@ public class ChainsDecorator extends MapDecorator<String, Double> {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Double> entry : decoratedMap.entrySet()) {
             sb.append(new ToBoldDecorator(entry.getKey()));
-            sb.append(" (withdrawal fee: ");
+            sb.append(" (fee: ");
             sb.append(entry.getValue());
             sb.append(")\n");
         }

@@ -6,7 +6,7 @@ import com.mongodb.client.MongoDatabase;
 import lombok.Getter;
 
 public class MongoConfig {
-    private static final String DEFAULT_URL = EnvVars.getEnvVar("MONGO_DB_URI");
+    private static final String DEFAULT_URL = EnvVars.getEnvVar("MONGO_DB_URI", null);
     private static final String DEFAULT_DATABASE = "coins";
 
     private static MongoConfig instance;

@@ -64,13 +64,13 @@ public class MyBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         // Return the bot's username
-        return EnvVars.getEnvVar("TELEGRAM_BOT_NAME");
+        return EnvVars.getEnvVar("TELEGRAM_BOT_NAME", null);
     }
 
     @Override
     public String getBotToken() {
         // Return the bot's token
-        return EnvVars.getEnvVar("TELEGRAM_BOT_TOKEN");
+        return EnvVars.getEnvVar("TELEGRAM_BOT_TOKEN", null);
     }
 
 }
